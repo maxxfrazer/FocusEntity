@@ -1,0 +1,394 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 52;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F301E0D1231462A90028AAF1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301E0D0231462A90028AAF1 /* AppDelegate.swift */; };
+		F301E0D3231462A90028AAF1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301E0D2231462A90028AAF1 /* ContentView.swift */; };
+		F301E0D7231462AB0028AAF1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F301E0D6231462AB0028AAF1 /* Assets.xcassets */; };
+		F301E0DA231462AB0028AAF1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F301E0D9231462AB0028AAF1 /* Preview Assets.xcassets */; };
+		F301E0DD231462AB0028AAF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F301E0DB231462AB0028AAF1 /* LaunchScreen.storyboard */; };
+		F301E0E5231462D90028AAF1 /* FocusARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301E0E4231462D90028AAF1 /* FocusARView.swift */; };
+		F301E0F2231515430028AAF1 /* FocusEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301E0EF231515430028AAF1 /* FocusEntity.swift */; };
+		F301E0F3231515430028AAF1 /* FocusPlane.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301E0F0231515430028AAF1 /* FocusPlane.swift */; };
+		F301E0F4231515430028AAF1 /* float4x4+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301E0F1231515430028AAF1 /* float4x4+Extension.swift */; };
+		F301E0F7231515730028AAF1 /* SmartHitTest in Frameworks */ = {isa = PBXBuildFile; productRef = F301E0F6231515730028AAF1 /* SmartHitTest */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		F301E0CD231462A90028AAF1 /* FocusEntity-Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FocusEntity-Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F301E0D0231462A90028AAF1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		F301E0D2231462A90028AAF1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		F301E0D6231462AB0028AAF1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F301E0D9231462AB0028AAF1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		F301E0DC231462AB0028AAF1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		F301E0DE231462AB0028AAF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F301E0E4231462D90028AAF1 /* FocusARView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusARView.swift; sourceTree = "<group>"; };
+		F301E0EF231515430028AAF1 /* FocusEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FocusEntity.swift; path = ../../../../Sources/FocusEntity/FocusEntity.swift; sourceTree = "<group>"; };
+		F301E0F0231515430028AAF1 /* FocusPlane.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FocusPlane.swift; path = ../../../../Sources/FocusEntity/FocusPlane.swift; sourceTree = "<group>"; };
+		F301E0F1231515430028AAF1 /* float4x4+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "float4x4+Extension.swift"; path = "../../../../Sources/FocusEntity/float4x4+Extension.swift"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F301E0CA231462A90028AAF1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F301E0F7231515730028AAF1 /* SmartHitTest in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F301E0C4231462A90028AAF1 = {
+			isa = PBXGroup;
+			children = (
+				F301E0CF231462A90028AAF1 /* FocusEntity-Example */,
+				F301E0CE231462A90028AAF1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F301E0CE231462A90028AAF1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F301E0CD231462A90028AAF1 /* FocusEntity-Example.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F301E0CF231462A90028AAF1 /* FocusEntity-Example */ = {
+			isa = PBXGroup;
+			children = (
+				F301E0D0231462A90028AAF1 /* AppDelegate.swift */,
+				F301E0D2231462A90028AAF1 /* ContentView.swift */,
+				F301E0E4231462D90028AAF1 /* FocusARView.swift */,
+				F301E0D6231462AB0028AAF1 /* Assets.xcassets */,
+				F301E0DB231462AB0028AAF1 /* LaunchScreen.storyboard */,
+				F301E0DE231462AB0028AAF1 /* Info.plist */,
+				F301E0EE231515370028AAF1 /* FocusEntity */,
+				F301E0D8231462AB0028AAF1 /* Preview Content */,
+			);
+			path = "FocusEntity-Example";
+			sourceTree = "<group>";
+		};
+		F301E0D8231462AB0028AAF1 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				F301E0D9231462AB0028AAF1 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		F301E0EE231515370028AAF1 /* FocusEntity */ = {
+			isa = PBXGroup;
+			children = (
+				F301E0F1231515430028AAF1 /* float4x4+Extension.swift */,
+				F301E0EF231515430028AAF1 /* FocusEntity.swift */,
+				F301E0F0231515430028AAF1 /* FocusPlane.swift */,
+			);
+			path = FocusEntity;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F301E0CC231462A90028AAF1 /* FocusEntity-Example */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F301E0E1231462AB0028AAF1 /* Build configuration list for PBXNativeTarget "FocusEntity-Example" */;
+			buildPhases = (
+				F301E0C9231462A90028AAF1 /* Sources */,
+				F301E0CA231462A90028AAF1 /* Frameworks */,
+				F301E0CB231462A90028AAF1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "FocusEntity-Example";
+			packageProductDependencies = (
+				F301E0F6231515730028AAF1 /* SmartHitTest */,
+			);
+			productName = "FocusEntity-Example";
+			productReference = F301E0CD231462A90028AAF1 /* FocusEntity-Example.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F301E0C5231462A90028AAF1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1100;
+				LastUpgradeCheck = 1100;
+				ORGANIZATIONNAME = "Max Cobb";
+				TargetAttributes = {
+					F301E0CC231462A90028AAF1 = {
+						CreatedOnToolsVersion = 11.0;
+					};
+				};
+			};
+			buildConfigurationList = F301E0C8231462A90028AAF1 /* Build configuration list for PBXProject "FocusEntity-Example" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F301E0C4231462A90028AAF1;
+			packageReferences = (
+				F301E0F5231515730028AAF1 /* XCRemoteSwiftPackageReference "ARKit-SmartHitTest" */,
+			);
+			productRefGroup = F301E0CE231462A90028AAF1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F301E0CC231462A90028AAF1 /* FocusEntity-Example */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F301E0CB231462A90028AAF1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F301E0DD231462AB0028AAF1 /* LaunchScreen.storyboard in Resources */,
+				F301E0DA231462AB0028AAF1 /* Preview Assets.xcassets in Resources */,
+				F301E0D7231462AB0028AAF1 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F301E0C9231462A90028AAF1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F301E0D3231462A90028AAF1 /* ContentView.swift in Sources */,
+				F301E0D1231462A90028AAF1 /* AppDelegate.swift in Sources */,
+				F301E0F2231515430028AAF1 /* FocusEntity.swift in Sources */,
+				F301E0F3231515430028AAF1 /* FocusPlane.swift in Sources */,
+				F301E0F4231515430028AAF1 /* float4x4+Extension.swift in Sources */,
+				F301E0E5231462D90028AAF1 /* FocusARView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		F301E0DB231462AB0028AAF1 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F301E0DC231462AB0028AAF1 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F301E0DF231462AB0028AAF1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		F301E0E0231462AB0028AAF1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F301E0E2231462AB0028AAF1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"FocusEntity-Example/Preview Content\"";
+				DEVELOPMENT_TEAM = N2RTJDRM64;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "FocusEntity-Example/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "cobb.max.FocusEntity-Example";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F301E0E3231462AB0028AAF1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"FocusEntity-Example/Preview Content\"";
+				DEVELOPMENT_TEAM = N2RTJDRM64;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "FocusEntity-Example/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "cobb.max.FocusEntity-Example";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F301E0C8231462A90028AAF1 /* Build configuration list for PBXProject "FocusEntity-Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F301E0DF231462AB0028AAF1 /* Debug */,
+				F301E0E0231462AB0028AAF1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F301E0E1231462AB0028AAF1 /* Build configuration list for PBXNativeTarget "FocusEntity-Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F301E0E2231462AB0028AAF1 /* Debug */,
+				F301E0E3231462AB0028AAF1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F301E0F5231515730028AAF1 /* XCRemoteSwiftPackageReference "ARKit-SmartHitTest" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/maxxfrazer/ARKit-SmartHitTest";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F301E0F6231515730028AAF1 /* SmartHitTest */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F301E0F5231515730028AAF1 /* XCRemoteSwiftPackageReference "ARKit-SmartHitTest" */;
+			productName = SmartHitTest;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = F301E0C5231462A90028AAF1 /* Project object */;
+}
