@@ -13,11 +13,11 @@ import ARKit
 import UIKit
 
 class FocusARView: ARView, ARSmartHitTest, ARSessionDelegate {
-  let focusSquare = FocusPlane(size: 0.17)
+  let focusSquare = FESquare()
   required init(frame frameRect: CGRect) {
     super.init(frame: frameRect)
     focusSquare.viewDelegate = self
-    self.scene.addAnchor(focusSquare)
+//    self.scene.addAnchor(focusSquare)
     let config = ARWorldTrackingConfiguration()
     config.planeDetection = [.horizontal, .vertical]
     session.delegate = self

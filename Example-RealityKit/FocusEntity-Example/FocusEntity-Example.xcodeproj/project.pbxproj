@@ -14,9 +14,11 @@
 		F301E0DD231462AB0028AAF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F301E0DB231462AB0028AAF1 /* LaunchScreen.storyboard */; };
 		F301E0E5231462D90028AAF1 /* FocusARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301E0E4231462D90028AAF1 /* FocusARView.swift */; };
 		F301E0F2231515430028AAF1 /* FocusEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301E0EF231515430028AAF1 /* FocusEntity.swift */; };
-		F301E0F3231515430028AAF1 /* FocusPlane.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301E0F0231515430028AAF1 /* FocusPlane.swift */; };
 		F301E0F4231515430028AAF1 /* float4x4+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301E0F1231515430028AAF1 /* float4x4+Extension.swift */; };
 		F301E0F7231515730028AAF1 /* SmartHitTest in Frameworks */ = {isa = PBXBuildFile; productRef = F301E0F6231515730028AAF1 /* SmartHitTest */; };
+		F31C2E3F2316C6D700C3C901 /* FEPlane.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31C2E3C2316C6D700C3C901 /* FEPlane.swift */; };
+		F31C2E402316C6D700C3C901 /* FESquare+Segment.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31C2E3D2316C6D700C3C901 /* FESquare+Segment.swift */; };
+		F31C2E412316C6D700C3C901 /* FESquare.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31C2E3E2316C6D700C3C901 /* FESquare.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,8 +31,10 @@
 		F301E0DE231462AB0028AAF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F301E0E4231462D90028AAF1 /* FocusARView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusARView.swift; sourceTree = "<group>"; };
 		F301E0EF231515430028AAF1 /* FocusEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FocusEntity.swift; path = ../../../../Sources/FocusEntity/FocusEntity.swift; sourceTree = "<group>"; };
-		F301E0F0231515430028AAF1 /* FocusPlane.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FocusPlane.swift; path = ../../../../Sources/FocusEntity/FocusPlane.swift; sourceTree = "<group>"; };
 		F301E0F1231515430028AAF1 /* float4x4+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "float4x4+Extension.swift"; path = "../../../../Sources/FocusEntity/float4x4+Extension.swift"; sourceTree = "<group>"; };
+		F31C2E3C2316C6D700C3C901 /* FEPlane.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FEPlane.swift; path = ../../../../Sources/FocusEntity/FEPlane.swift; sourceTree = "<group>"; };
+		F31C2E3D2316C6D700C3C901 /* FESquare+Segment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "FESquare+Segment.swift"; path = "../../../../Sources/FocusEntity/FESquare+Segment.swift"; sourceTree = "<group>"; };
+		F31C2E3E2316C6D700C3C901 /* FESquare.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FESquare.swift; path = ../../../../Sources/FocusEntity/FESquare.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,7 +93,9 @@
 			children = (
 				F301E0F1231515430028AAF1 /* float4x4+Extension.swift */,
 				F301E0EF231515430028AAF1 /* FocusEntity.swift */,
-				F301E0F0231515430028AAF1 /* FocusPlane.swift */,
+				F31C2E3C2316C6D700C3C901 /* FEPlane.swift */,
+				F31C2E3E2316C6D700C3C901 /* FESquare.swift */,
+				F31C2E3D2316C6D700C3C901 /* FESquare+Segment.swift */,
 			);
 			path = FocusEntity;
 			sourceTree = "<group>";
@@ -172,11 +178,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				F301E0D3231462A90028AAF1 /* ContentView.swift in Sources */,
+				F31C2E3F2316C6D700C3C901 /* FEPlane.swift in Sources */,
 				F301E0D1231462A90028AAF1 /* AppDelegate.swift in Sources */,
+				F31C2E402316C6D700C3C901 /* FESquare+Segment.swift in Sources */,
 				F301E0F2231515430028AAF1 /* FocusEntity.swift in Sources */,
-				F301E0F3231515430028AAF1 /* FocusPlane.swift in Sources */,
 				F301E0F4231515430028AAF1 /* float4x4+Extension.swift in Sources */,
 				F301E0E5231462D90028AAF1 /* FocusARView.swift in Sources */,
+				F31C2E412316C6D700C3C901 /* FESquare.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
