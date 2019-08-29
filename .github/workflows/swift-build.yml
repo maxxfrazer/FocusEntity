@@ -1,0 +1,27 @@
+name: lint
+
+on:
+  push:
+    branches:
+      - "master"
+    tags:
+      - "!*"
+  pull_request:
+    branches:
+    - "*"
+
+jobs:
+  build:
+    runs-on: macOS-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: lint
+      run: |
+        ./install_swiftlint.sh
+        swiftlint
+      #   swift package generate-xcodeproj
+      #   xcodebuild clean build -project $PROJECT -scheme $SCHEME -destination "$DESTINATION" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
+      # env:
+      #   PROJECT: FocusNode.xcodeproj
+      #   SCHEME: FocusNode-Package
+      #   DESTINATION: platform=iOS Simulator,name=iPhone Xs
