@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  FEPlane.swift
 //  
 //
 //  Created by Max Cobb on 8/26/19.
@@ -11,7 +11,7 @@ import QuartzCore
 
 /// A simple example subclass of FocusNode which shows whether the plane is
 /// tracking on a known surface or estimating.
-public class FocusPlane: FocusEntity {
+public class FEPlane: FocusEntity {
 
   /// Original size of the focus square in meters.
   let size: Float
@@ -24,7 +24,7 @@ public class FocusPlane: FocusEntity {
   /// Set up the focus square with just the size as a parameter
   ///
   /// - Parameter size: Size in m of the square. Default is 0.17
-  public init(size: Float = 0.17) {
+  public required init(size: Float = 0.17) {
     self.size = size
     super.init()
 //    opacity = 0.0
@@ -36,7 +36,9 @@ public class FocusPlane: FocusEntity {
   }
 
   public required init() {
-    fatalError("\(#function) has not been implemented")
+    self.size = 0.17
+    super.init()
+    self.positioningNode.addChild(fillPlane)
   }
 
   // MARK: Animations
@@ -47,13 +49,14 @@ public class FocusPlane: FocusEntity {
   override public func stateChanged(newPlane: Bool) {
     if self.onPlane {
 //      positioningNode.removeAction(forKey: "pulse")
-      self.fillPlane.model?.materials[0] = SimpleMaterial(color: FocusPlane.onColor, isMetallic: false)
-//      self.fillPlane.geometry?.firstMaterial?.emission.contents = FocusPlane.onColor
+      self.fillPlane.model?.materials[0] = SimpleMaterial(
+        color: FEPlane.onColor, isMetallic: false
+      )
     } else {
       // Open animation
-      self.fillPlane.model?.materials[0] = SimpleMaterial(color: FocusPlane.offColor, isMetallic: false)
-//      self.fillPlane.geometry?.firstMaterial?.diffuse.contents = FocusPlane.offColor
-//      self.fillPlane.geometry?.firstMaterial?.emission.contents = FocusPlane.offColor
+      self.fillPlane.model?.materials[0] = SimpleMaterial(
+        color: FEPlane.offColor, isMetallic: false
+      )
     }
     isAnimating = false
   }
@@ -68,7 +71,7 @@ public class FocusPlane: FocusEntity {
     let node = ModelEntity(
       mesh: MeshResource.generatePlane(width: length, depth: length),
       materials: [
-        SimpleMaterial(color: FocusPlane.offColor, isMetallic: false)
+        SimpleMaterial(color: FEPlane.offColor, isMetallic: false)
       ]
     )
     node.scale = SIMD3<Float>(repeating: self.size)
@@ -76,11 +79,11 @@ public class FocusPlane: FocusEntity {
 //    node.opacity = 0.5
 
 //    let material = plane.firstMaterial!
-//    material.diffuse.contents = FocusPlane.offColor
+//    material.diffuse.contents = FocusEntityPlane.offColor
 //    material.isDoubleSided = true
 //    material.ambient.contents = UIColor.black
 //    material.lightingModel = .constant
-//    material.emission.contents = FocusPlane.offColor
+//    material.emission.contents = FocusEntityPlane.offColor
 
     return node
   }()

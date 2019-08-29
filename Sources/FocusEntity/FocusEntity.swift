@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  FocusEntity.swift
 //  
 //
 //  Created by Max Cobb on 8/26/19.
@@ -21,7 +21,7 @@ private extension UIView {
 An `SCNNode` which is used to provide uses with visual cues about the status of ARKit world tracking.
 - Tag: FocusSquare
 */
-open class FocusEntity: Entity, HasAnchoring {
+open class FocusEntity: Entity {
 
   weak public var viewDelegate: ARSmartHitTest? {
     didSet {
@@ -29,10 +29,12 @@ open class FocusEntity: Entity, HasAnchoring {
         print("FocusNode viewDelegate must be an ARSCNView for now")
         return
       }
-      view.scene.addAnchor(dummyPOV)
+      view.scene.addAnchor(povNode)
+      view.scene.addAnchor(rootNode)
     }
   }
-  private var dummyPOV = AnchorEntity()
+  private var povNode = AnchorEntity()
+  private var rootNode = AnchorEntity()
 
   // MARK: - Types
   public enum State: Equatable {
@@ -63,9 +65,13 @@ open class FocusEntity: Entity, HasAnchoring {
 
       switch state {
       case .initializing:
-        displayAsBillboard()
-
+        if oldValue != .initializing {
+          displayAsBillboard()
+        }
       case let .detecting(hitTestResult, camera):
+        if oldValue == .initializing {
+          self.rootNode.addChild(self)
+        }
         if let planeAnchor = hitTestResult.anchor as? ARPlaneAnchor {
           nodeOnPlane(for: hitTestResult, planeAnchor: planeAnchor, camera: camera)
           currentPlaneAnchor = planeAnchor
@@ -100,7 +106,7 @@ open class FocusEntity: Entity, HasAnchoring {
   /// Previously visited plane anchors.
   private var anchorsOfVisitedPlanes: Set<ARAnchor> = []
 
-  /// The primary node that controls the position of other `FocusSquare` nodes.
+  /// The primary node that controls the position of other `FocusEntity` nodes.
   public let positioningNode = Entity()
 
   public var scaleNodeBasedOnDistance = true {
@@ -115,9 +121,8 @@ open class FocusEntity: Entity, HasAnchoring {
 
   public required init() {
     super.init()
-
+    self.name = "FocusEntity"
     self.orientation = simd_quatf(angle: .pi / 2, axis: [1,0,0])
-//    self.positioningNode.eulerAngles.x = .pi / 2 // Horizontal
 
     // Always render focus square on top of other content.
 //    self.displayNodeHierarchyOnTop(true)
@@ -152,11 +157,12 @@ open class FocusEntity: Entity, HasAnchoring {
 
   /// Displays the focus square parallel to the camera plane.
   private func displayAsBillboard() {
+    self.povNode.addChild(self)
     self.onPlane = false
     self.transform = .identity
     self.orientation = simd_quatf(angle: .pi / 2, axis: [1,0,0])
-//    eulerAngles.x = .pi / 2
     position = [0, 0, -0.8]
+
     unhide()
     stateChangedSetup()
   }
@@ -333,15 +339,15 @@ open class FocusEntity: Entity, HasAnchoring {
 
   /// - TODO: not sure if this will actually animate yet
   private func performAlignmentAnimation(to newOrientation: simd_quatf) {
-    self.isChangingAlignment = true
-    SCNTransaction.begin()
-    SCNTransaction.completionBlock = {
-      self.isChangingAlignment = false
-    }
-    SCNTransaction.animationDuration = 0.3
-    SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+//    self.isChangingAlignment = true
+//    SCNTransaction.begin()
+//    SCNTransaction.completionBlock = {
+//      self.isChangingAlignment = false
+//    }
+//    SCNTransaction.animationDuration = 0.3
+//    SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
     orientation = newOrientation
-    SCNTransaction.commit()
+//    SCNTransaction.commit()
   }
 
   /// - TODO: RealityKit to allow for setting render order
@@ -363,18 +369,18 @@ open class FocusEntity: Entity, HasAnchoring {
 //    updateRenderOrder(for: self.positioningNode)
 //  }
 
-  /// - TODO: Add rootNode equivalent in RealityKit
   public func updateFocusNode() {
     guard let view = self.viewDelegate as? (ARView & ARSmartHitTest) else {
       print("FocusNode viewDelegate must be an ARSCNView for now")
       return
     }
     // Perform hit testing only when ARKit tracking is in a good state.
-    guard let camera = view.session.currentFrame?.camera, case .normal = camera.trackingState else {
-        self.state = .initializing
-        dummyPOV.transform = view.cameraTransform
-        dummyPOV.addChild(self)
-        return
+    guard let camera = view.session.currentFrame?.camera,
+      case .normal = camera.trackingState
+    else {
+      self.state = .initializing
+      povNode.transform = view.cameraTransform
+      return
     }
     var result: ARHitTestResult?
     if !Thread.isMainThread {
@@ -392,12 +398,10 @@ open class FocusEntity: Entity, HasAnchoring {
     }
 
     if let result = result {
-        view.scene.addAnchor(self)
-        self.state = .detecting(hitTestResult: result, camera: camera)
+      self.state = .detecting(hitTestResult: result, camera: camera)
     } else {
-        self.state = .initializing
-        dummyPOV.transform = view.cameraTransform
-        dummyPOV.addChild(self)
+      povNode.transform = view.cameraTransform
+      self.state = .initializing
     }
   }
 }
