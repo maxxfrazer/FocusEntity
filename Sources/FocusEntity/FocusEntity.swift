@@ -122,7 +122,7 @@ open class FocusEntity: Entity {
   public required init() {
     super.init()
     self.name = "FocusEntity"
-    self.orientation = simd_quatf(angle: .pi / 2, axis: [1,0,0])
+    self.orientation = simd_quatf(angle: .pi / 2, axis: [1, 0, 0])
 
     // Always render focus square on top of other content.
 //    self.displayNodeHierarchyOnTop(true)
@@ -160,7 +160,7 @@ open class FocusEntity: Entity {
     self.povNode.addChild(self)
     self.onPlane = false
     self.transform = .identity
-    self.orientation = simd_quatf(angle: .pi / 2, axis: [1,0,0])
+    self.orientation = simd_quatf(angle: .pi / 2, axis: [1, 0, 0])
     position = [0, 0, -0.8]
 
     unhide()
@@ -337,17 +337,9 @@ open class FocusEntity: Entity {
     self.stateChanged(newPlane: newPlane)
   }
 
-  /// - TODO: not sure if this will actually animate yet
+  /// - TODO: Animate this orientation change
   private func performAlignmentAnimation(to newOrientation: simd_quatf) {
-//    self.isChangingAlignment = true
-//    SCNTransaction.begin()
-//    SCNTransaction.completionBlock = {
-//      self.isChangingAlignment = false
-//    }
-//    SCNTransaction.animationDuration = 0.3
-//    SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
     orientation = newOrientation
-//    SCNTransaction.commit()
   }
 
   /// - TODO: RealityKit to allow for setting render order

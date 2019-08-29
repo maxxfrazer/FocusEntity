@@ -1,0 +1,6 @@
+disabled_rules:
+  - todo
+  - type_name
+identifier_name:
+  min_length:
+    warning: 1

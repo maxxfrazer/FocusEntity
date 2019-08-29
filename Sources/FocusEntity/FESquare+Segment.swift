@@ -68,9 +68,15 @@ internal extension FESquare {
 
       switch alignment {
       case .vertical:
-        plane = ModelComponent(mesh: .generatePlane(width: 1, depth: 1), materials: [UnlitMaterial(color: FESquare.primaryColor)])
+        plane = ModelComponent(
+          mesh: .generatePlane(width: 1, depth: 1),
+          materials: [UnlitMaterial(color: FESquare.primaryColor)]
+        )
       case .horizontal:
-        plane = ModelComponent(mesh: .generatePlane(width: 1, depth: 1), materials: [UnlitMaterial(color: FESquare.primaryColor)])
+        plane = ModelComponent(
+          mesh: .generatePlane(width: 1, depth: 1),
+          materials: [UnlitMaterial(color: FESquare.primaryColor)]
+        )
       }
       super.init()
 

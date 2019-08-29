@@ -78,14 +78,14 @@ public class FESquare: FocusEntity {
 
     let sl: Float = 0.5  // segment length
     let c: Float = FESquare.thickness / 2 // correction to align lines perfectly
-    s1.position += [-(sl / 2 - c) ,   0, -(sl - c)]
-    s2.position += [sl / 2 - c    ,   0, -(sl - c)]
-    s3.position += [-sl           ,   0,   -sl / 2]
-    s4.position += [sl            ,   0,   -sl / 2]
-    s5.position += [-sl           ,   0,    sl / 2]
-    s6.position += [sl            ,   0,    sl / 2]
-    s7.position += [-(sl / 2 - c) ,   0,    sl - c]
-    s8.position += [sl / 2 - c    ,   0,    sl - c]
+    s1.position += [-(sl / 2 - c), 0, -(sl - c)]
+    s2.position += [sl / 2 - c, 0, -(sl - c)]
+    s3.position += [-sl, 0, -sl / 2]
+    s4.position += [sl, 0, -sl / 2]
+    s5.position += [-sl, 0, sl / 2]
+    s6.position += [sl, 0, sl / 2]
+    s7.position += [-(sl / 2 - c), 0, sl - c]
+    s8.position += [sl / 2 - c, 0, sl - c]
 
     for segment in segments {
       self.positioningNode.addChild(segment)
@@ -215,7 +215,10 @@ public class FESquare: FocusEntity {
 
 //    let plane = SCNPlane(width: length, height: length)
 //    let node = SCNNode(geometry: plane)
-    let node = ModelEntity(mesh: MeshResource.generatePlane(width: Float(length), depth: Float(length)), materials: [UnlitMaterial(color: FESquare.fillColor.withAlphaComponent(0.0))])
+    let node = ModelEntity(
+      mesh: MeshResource.generatePlane(width: Float(length), depth: Float(length)),
+      materials: [UnlitMaterial(color: FESquare.fillColor.withAlphaComponent(0.0))]
+    )
     node.name = "fillPlane"
 
 //    let material = plane.firstMaterial!
@@ -246,7 +249,9 @@ private func flashAnimation(duration: TimeInterval) -> SCNAction {
     let elapsedTimePercentage = elapsedTime / CGFloat(duration)
     let saturation = 2.8 * (elapsedTimePercentage - 0.5) * (elapsedTimePercentage - 0.5) + 0.3
     if let material = node.geometry?.firstMaterial {
-      material.diffuse.contents = UIColor(hue: 0.1333, saturation: saturation, brightness: 1.0, alpha: 1.0)
+      material.diffuse.contents = UIColor(
+        hue: 0.1333, saturation: saturation, brightness: 1.0, alpha: 1.0
+      )
     }
   }
   return action
