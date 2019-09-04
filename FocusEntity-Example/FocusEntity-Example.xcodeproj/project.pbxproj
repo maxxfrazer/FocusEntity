@@ -30,11 +30,11 @@
 		F301E0DC231462AB0028AAF1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F301E0DE231462AB0028AAF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F301E0E4231462D90028AAF1 /* FocusARView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusARView.swift; sourceTree = "<group>"; };
-		F3F29EDB2317C0DA00C3864B /* FESquare.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FESquare.swift; path = ../../../Sources/FocusEntity/FESquare.swift; sourceTree = "<group>"; };
-		F3F29EDC2317C0DA00C3864B /* FESquare+Segment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "FESquare+Segment.swift"; path = "../../../Sources/FocusEntity/FESquare+Segment.swift"; sourceTree = "<group>"; };
-		F3F29EDD2317C0DA00C3864B /* float4x4+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "float4x4+Extension.swift"; path = "../../../Sources/FocusEntity/float4x4+Extension.swift"; sourceTree = "<group>"; };
-		F3F29EDE2317C0DA00C3864B /* FocusEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FocusEntity.swift; path = ../../../Sources/FocusEntity/FocusEntity.swift; sourceTree = "<group>"; };
-		F3F29EDF2317C0DA00C3864B /* FEPlane.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FEPlane.swift; path = ../../../Sources/FocusEntity/FEPlane.swift; sourceTree = "<group>"; };
+		F3F29EDB2317C0DA00C3864B /* FESquare.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FESquare.swift; sourceTree = "<group>"; };
+		F3F29EDC2317C0DA00C3864B /* FESquare+Segment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "FESquare+Segment.swift"; path = "../../Sources/FocusEntity/FESquare+Segment.swift"; sourceTree = "<group>"; };
+		F3F29EDD2317C0DA00C3864B /* float4x4+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "float4x4+Extension.swift"; path = "../../Sources/FocusEntity/float4x4+Extension.swift"; sourceTree = "<group>"; };
+		F3F29EDE2317C0DA00C3864B /* FocusEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FocusEntity.swift; path = ../../Sources/FocusEntity/FocusEntity.swift; sourceTree = "<group>"; };
+		F3F29EDF2317C0DA00C3864B /* FEPlane.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FEPlane.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,8 +97,9 @@
 				F3F29EDD2317C0DA00C3864B /* float4x4+Extension.swift */,
 				F3F29EDE2317C0DA00C3864B /* FocusEntity.swift */,
 			);
-			path = FocusEntity;
-			sourceTree = "<group>";
+			name = FocusEntity;
+			path = ../Sources/FocusEntity;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
