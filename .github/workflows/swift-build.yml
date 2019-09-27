@@ -18,6 +18,8 @@ jobs:
     - name: Build Package
       run: |
         ls /Applications/
+        xcode-select -p
+        xcode-select --switch /Applications/Xcode_11.app/
         swift package generate-xcodeproj
         xcodebuild clean build -project $PROJECT -scheme $SCHEME -destination "$DESTINATION" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
       env:
