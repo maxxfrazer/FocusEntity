@@ -23,4 +23,4 @@ jobs:
         DEVELOPER_DIR: /Applications/Xcode_11.app/Contents/Developer
         PROJECT: FocusEntity.xcodeproj
         SCHEME: FocusEntity-Package
-        DESTINATION: platform=iOS Simulator,name=iPhone Xs
+        DESTINATION: platform=iOS Simulator,name=iPhone 11
