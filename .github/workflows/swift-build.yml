@@ -1,0 +1,26 @@
+name: build
+
+on:
+  push:
+    branches:
+      - "master"
+    tags:
+      - "!*"
+  pull_request:
+    branches:
+    - "*"
+
+jobs:
+  build:
+    runs-on: macOS-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build Package
+      run: |
+        swift package generate-xcodeproj
+        xcodebuild clean build -project $PROJECT -scheme $SCHEME -sdk $SDK CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
+      env:
+        DEVELOPER_DIR: /Applications/Xcode_11.app/Contents/Developer
+        PROJECT: FocusEntity.xcodeproj
+        SCHEME: FocusEntity-Package
+        SDK: iphoneos

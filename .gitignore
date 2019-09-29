@@ -46,6 +46,7 @@ playground.xcworkspace
 .build/
 xcshareddata/
 *.xcworkspace/
+*.xcodeproj/
 Package.resolved
 
 # CocoaPods
