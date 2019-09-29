@@ -18,9 +18,9 @@ jobs:
     - name: Build Package
       run: |
         swift package generate-xcodeproj
-        xcodebuild clean build -project $PROJECT -scheme $SCHEME -destination "$DESTINATION" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
+        xcodebuild clean build -project $PROJECT -scheme $SCHEME -sdk $SDK CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
       env:
         DEVELOPER_DIR: /Applications/Xcode_11.app/Contents/Developer
         PROJECT: FocusEntity.xcodeproj
         SCHEME: FocusEntity-Package
-        DESTINATION: platform=iOS Simulator,name=iPhone 11
+        SDK: iphoneos
