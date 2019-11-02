@@ -104,7 +104,7 @@ open class FocusEntity: Entity {
   private(set) var recentFocusNodeAlignments: [ARPlaneAnchor.Alignment] = []
 
   /// Previously visited plane anchors.
-  private var anchorsOfVisitedPlanes: Set<ARAnchor> = []
+//  private var anchorsOfVisitedPlanes: Set<ARAnchor> = []
 
   /// The primary node that controls the position of other `FocusEntity` nodes.
   public let positioningNode = Entity()
@@ -178,8 +178,9 @@ open class FocusEntity: Entity {
   /// Called when a plane has been detected.
   private func nodeOnPlane(for hitTestResult: ARHitTestResult, planeAnchor: ARPlaneAnchor, camera: ARCamera?) {
     self.onPlane = true
-    self.stateChangedSetup(newPlane: !anchorsOfVisitedPlanes.contains(planeAnchor))
-    anchorsOfVisitedPlanes.insert(planeAnchor)
+//    self.stateChangedSetup(newPlane: !anchorsOfVisitedPlanes.contains(planeAnchor))
+    self.stateChangedSetup(newPlane: false)
+//    anchorsOfVisitedPlanes.insert(planeAnchor)
     let position = hitTestResult.worldTransform.translation
     recentFocusNodePositions.append(position)
     updateTransform(for: position, hitTestResult: hitTestResult, camera: camera)
