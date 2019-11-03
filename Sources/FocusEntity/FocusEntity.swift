@@ -1,6 +1,6 @@
 //
 //  FocusEntity.swift
-//  
+//
 //
 //  Created by Max Cobb on 8/26/19.
 //
@@ -26,7 +26,7 @@ open class FocusEntity: Entity {
   weak public var viewDelegate: ARSmartHitTest? {
     didSet {
       guard let view = self.viewDelegate as? (ARView & ARSmartHitTest) else {
-        print("FocusNode viewDelegate must be an ARSCNView for now")
+        print("FocusNode viewDelegate must conform to ARSmartHitTest for now")
         return
       }
       view.scene.addAnchor(povNode)
@@ -363,7 +363,7 @@ open class FocusEntity: Entity {
 
   public func updateFocusNode() {
     guard let view = self.viewDelegate as? (ARView & ARSmartHitTest) else {
-      print("FocusNode viewDelegate must be an ARSCNView for now")
+      print("FocusNode viewDelegate must conform to ARSmartHitTest and be an ARView for now")
       return
     }
     // Perform hit testing only when ARKit tracking is in a good state.
