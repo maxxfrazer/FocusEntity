@@ -11,6 +11,18 @@ This package is based on the package [ARKit-FocusNode](https://github.com/maxxfr
 
 [The Example](./Example-RealityKit) looks identical to the above GIF, which uses the FESquare class (Focus Entity Square).
 
+
+## ⚠️ iOS 13.2 bug ⚠️
+
+There is a crashing bug when using this library with iOS 13.2 and importing via Swift Package Manager
+
+The Swift bug has been reported here:
+https://bugs.swift.org/browse/SR-11564
+
+And there is a temporary solution, which involves setting the "Dead Code Stripping" property in your build's target to "No"
+
+Target > Build Settings > Linking > Dead Code Stripping
+
 ## Minimum Requirements
   - Swift 5.0
   - iOS 13.0 (RealityKit)
