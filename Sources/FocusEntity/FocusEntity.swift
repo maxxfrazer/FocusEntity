@@ -17,6 +17,8 @@ private extension UIView {
   }
 }
 
+extension ARView: ARSmartHitTest {}
+
 /**
 An `SCNNode` which is used to provide uses with visual cues about the status of ARKit world tracking.
 - Tag: FocusSquare

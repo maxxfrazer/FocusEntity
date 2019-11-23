@@ -7,12 +7,12 @@
 //
 
 import RealityKit
-import SmartHitTest
 //import FocusEntity
+import Combine
 import ARKit
 import UIKit
 
-class FocusARView: ARView, ARSmartHitTest, ARSessionDelegate {
+class FocusARView: ARView, ARSessionDelegate {
   let focusSquare = FESquare()
   required init(frame frameRect: CGRect) {
     super.init(frame: frameRect)

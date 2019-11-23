@@ -45,11 +45,7 @@ See the [Example](./Example-RealityKit) for a full working example as can be see
 
 - After installing, import `FocusEntity` to your .swift file
 - Create an instance of `FESquare()`, or another `FocusEntity` class.
-- Add the `ARSmartHitTest` protocol to ARView or any subclass you might be using:
-```swift
-extension ARView: ARSmartHitTest {}
-```
-- Set the  FocusEntity's `viewDelegate` to the `ARView & ARSmartHitTest` class.
+- Set the  FocusEntity's `viewDelegate` to the `ARView`.
 - Using the `ARSessionDelegate`, define the [session(_:didUpate:)](https://developer.apple.com/documentation/arkit/arsessiondelegate/2865611-session) function with a call to `focusEntity.updateFocusNode()`
 
 
