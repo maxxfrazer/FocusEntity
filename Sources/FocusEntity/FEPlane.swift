@@ -9,7 +9,7 @@ import ARKit
 import RealityKit
 import QuartzCore
 
-/// A simple example subclass of FocusNode which shows whether the plane is
+/// A simple example subclass of FocusEntity which shows whether the plane is
 /// tracking on a known surface or estimating.
 public class FEPlane: FocusEntity {
 
@@ -48,7 +48,7 @@ public class FEPlane: FocusEntity {
   /// - Parameter newPlane: If the cube is tracking a new surface for the first time
   override public func stateChanged(newPlane: Bool) {
     if self.onPlane {
-//      positioningNode.removeAction(forKey: "pulse")
+//      positioningEntity.removeAction(forKey: "pulse")
       self.fillPlane.model?.materials[0] = SimpleMaterial(
         color: FEPlane.onColor, isMetallic: false
       )
@@ -68,15 +68,15 @@ public class FEPlane: FocusEntity {
     let correctionFactor = thickness / 2 // correction to align lines perfectly
     let length = Float(1.0 - thickness * 2 + correctionFactor)
 
-    let node = ModelEntity(
+    let fillEntity = ModelEntity(
       mesh: MeshResource.generatePlane(width: length, depth: length),
       materials: [
         SimpleMaterial(color: FEPlane.offColor, isMetallic: false)
       ]
     )
-    node.scale = SIMD3<Float>(repeating: self.size)
-    node.name = "fillPlane"
-//    node.opacity = 0.5
+    fillEntity.scale = SIMD3<Float>(repeating: self.size)
+    fillEntity.name = "fillPlane"
+//    fillEntity.opacity = 0.5
 
 //    let material = plane.firstMaterial!
 //    material.diffuse.contents = FocusEntityPlane.offColor
@@ -85,6 +85,6 @@ public class FEPlane: FocusEntity {
 //    material.lightingModel = .constant
 //    material.emission.contents = FocusEntityPlane.offColor
 
-    return node
+    return fillEntity
   }()
 }

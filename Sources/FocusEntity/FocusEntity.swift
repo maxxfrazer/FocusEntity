@@ -56,7 +56,7 @@ open class FocusEntity: Entity {
     }
   }
 
-  fileprivate func nodeOffPlane(_ hitTestResult: ARHitTestResult, _ camera: ARCamera?) {
+  fileprivate func entityOffPlane(_ hitTestResult: ARHitTestResult, _ camera: ARCamera?) {
     self.onPlane = false
     displayOffPlane(for: hitTestResult, camera: camera)
   }
@@ -75,10 +75,10 @@ open class FocusEntity: Entity {
           self.rootEntity.addChild(self)
         }
         if let planeAnchor = hitTestResult.anchor as? ARPlaneAnchor {
-          nodeOnPlane(for: hitTestResult, planeAnchor: planeAnchor, camera: camera)
+          entityOnPlane(for: hitTestResult, planeAnchor: planeAnchor, camera: camera)
           currentPlaneAnchor = planeAnchor
         } else {
-          nodeOffPlane(hitTestResult, camera)
+          entityOffPlane(hitTestResult, camera)
           currentPlaneAnchor = nil
         }
       }
@@ -178,7 +178,7 @@ open class FocusEntity: Entity {
   }
 
   /// Called when a plane has been detected.
-  private func nodeOnPlane(for hitTestResult: ARHitTestResult, planeAnchor: ARPlaneAnchor, camera: ARCamera?) {
+  private func entityOnPlane(for hitTestResult: ARHitTestResult, planeAnchor: ARPlaneAnchor, camera: ARCamera?) {
     self.onPlane = true
     self.stateChangedSetup(newPlane: !anchorsOfVisitedPlanes.contains(planeAnchor))
     anchorsOfVisitedPlanes.insert(planeAnchor)
@@ -345,7 +345,7 @@ open class FocusEntity: Entity {
   }
 
   /// - TODO: RealityKit to allow for setting render order
-  /// Sets the rendering order of the `positioningNode` to show on top or under other scene content.
+  /// Sets the rendering order of the `positioningEntity` to show on top or under other scene content.
 //  func displayNodeHierarchyOnTop(_ isOnTop: Bool) {
 //    // Recursivley traverses the node's children to update the rendering order depending on the `isOnTop` parameter.
 //    func updateRenderOrder(for node: Entity) {
