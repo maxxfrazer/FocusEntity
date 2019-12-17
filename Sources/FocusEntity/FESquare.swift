@@ -11,7 +11,7 @@ import RealityKit
 /// This example class is taken almost entirely from Apple's own examples.
 /// I have simply moved some things around to keep only what's necessary
 ///
-/// An `SCNNode` which is used to provide uses with visual cues about the status of ARKit world tracking.
+/// An `Entity` which is used to provide uses with visual cues about the status of ARKit world tracking.
 /// - Tag: FocusSquare
 public class FESquare: FocusEntity {
 
@@ -88,11 +88,11 @@ public class FESquare: FocusEntity {
     s8.position += [sl / 2 - c, 0, sl - c]
 
     for segment in segments {
-      self.positioningNode.addChild(segment)
+      self.positioningEntity.addChild(segment)
       segment.open()
     }
-    self.positioningNode.addChild(fillPlane)
-    self.positioningNode.scale = SIMD3<Float>(repeating: FESquare.size * FESquare.scaleForClosedSquare)
+    self.positioningEntity.addChild(fillPlane)
+    self.positioningEntity.scale = SIMD3<Float>(repeating: FESquare.size * FESquare.scaleForClosedSquare)
 
     // Always render focus square on top of other content.
 //    self.displayNodeHierarchyOnTop(true)
@@ -136,7 +136,7 @@ public class FESquare: FocusEntity {
     SCNTransaction.begin()
     SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
     SCNTransaction.animationDuration = FESquare.animationDuration / 4
-    positioningNode.scale = SIMD3<Float>(repeating: FESquare.size)
+    positioningEntity.scale = SIMD3<Float>(repeating: FESquare.size)
     SCNTransaction.commit()
   }
 

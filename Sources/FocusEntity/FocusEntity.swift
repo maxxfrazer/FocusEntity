@@ -20,7 +20,7 @@ private extension UIView {
 extension ARView: ARSmartHitTest {}
 
 /**
-An `SCNNode` which is used to provide uses with visual cues about the status of ARKit world tracking.
+An `Entity` which is used to provide uses with visual cues about the status of ARKit world tracking.
 - Tag: FocusSquare
 */
 open class FocusEntity: Entity {
@@ -28,15 +28,15 @@ open class FocusEntity: Entity {
   weak public var viewDelegate: ARSmartHitTest? {
     didSet {
       guard let view = self.viewDelegate as? (ARView & ARSmartHitTest) else {
-        print("FocusNode viewDelegate must conform to ARSmartHitTest for now")
+        print("FocusEntity viewDelegate must conform to ARSmartHitTest for now")
         return
       }
-      view.scene.addAnchor(povNode)
-      view.scene.addAnchor(rootNode)
+      view.scene.addAnchor(povEntity)
+      view.scene.addAnchor(rootEntity)
     }
   }
-  private var povNode = AnchorEntity()
-  private var rootNode = AnchorEntity()
+  private var povEntity = AnchorEntity()
+  private var rootEntity = AnchorEntity()
 
   // MARK: - Types
   public enum State: Equatable {
@@ -72,7 +72,7 @@ open class FocusEntity: Entity {
         }
       case let .detecting(hitTestResult, camera):
         if oldValue == .initializing {
-          self.rootNode.addChild(self)
+          self.rootEntity.addChild(self)
         }
         if let planeAnchor = hitTestResult.anchor as? ARPlaneAnchor {
           nodeOnPlane(for: hitTestResult, planeAnchor: planeAnchor, camera: camera)
@@ -100,20 +100,20 @@ open class FocusEntity: Entity {
   private(set) var currentPlaneAnchor: ARPlaneAnchor?
 
   /// The focus square's most recent positions.
-  private var recentFocusNodePositions: [SIMD3<Float>] = []
+  private var recentFocusEntityPositions: [SIMD3<Float>] = []
 
   /// The focus square's most recent alignments.
-  private(set) var recentFocusNodeAlignments: [ARPlaneAnchor.Alignment] = []
+  private(set) var recentFocusEntityAlignments: [ARPlaneAnchor.Alignment] = []
 
   /// Previously visited plane anchors.
   private var anchorsOfVisitedPlanes: Set<ARAnchor> = []
 
   /// The primary node that controls the position of other `FocusEntity` nodes.
-  public let positioningNode = Entity()
+  public let positioningEntity = Entity()
 
-  public var scaleNodeBasedOnDistance = true {
+  public var scaleEntityBasedOnDistance = true {
     didSet {
-      if self.scaleNodeBasedOnDistance == false {
+      if self.scaleEntityBasedOnDistance == false {
         self.scale = .one
       }
     }
@@ -129,7 +129,7 @@ open class FocusEntity: Entity {
     // Always render focus square on top of other content.
 //    self.displayNodeHierarchyOnTop(true)
 
-    self.addChild(self.positioningNode)
+    self.addChild(self.positioningEntity)
 
     // Start the focus square as a billboard.
     self.displayAsBillboard()
@@ -159,7 +159,7 @@ open class FocusEntity: Entity {
 
   /// Displays the focus square parallel to the camera plane.
   private func displayAsBillboard() {
-    self.povNode.addChild(self)
+    self.povEntity.addChild(self)
     self.onPlane = false
     self.transform = .identity
     self.orientation = simd_quatf(angle: .pi / 2, axis: [1, 0, 0])
@@ -173,7 +173,7 @@ open class FocusEntity: Entity {
   private func displayOffPlane(for hitTestResult: ARHitTestResult, camera: ARCamera?) {
     self.stateChangedSetup()
     let position = hitTestResult.worldTransform.translation
-    recentFocusNodePositions.append(position)
+    recentFocusEntityPositions.append(position)
     updateTransform(for: position, hitTestResult: hitTestResult, camera: camera)
   }
 
@@ -183,7 +183,7 @@ open class FocusEntity: Entity {
     self.stateChangedSetup(newPlane: !anchorsOfVisitedPlanes.contains(planeAnchor))
     anchorsOfVisitedPlanes.insert(planeAnchor)
     let position = hitTestResult.worldTransform.translation
-    recentFocusNodePositions.append(position)
+    recentFocusEntityPositions.append(position)
     updateTransform(for: position, hitTestResult: hitTestResult, camera: camera)
   }
 
@@ -192,14 +192,14 @@ open class FocusEntity: Entity {
   /// Update the transform of the focus square to be aligned with the camera.
   private func updateTransform(for position: SIMD3<Float>, hitTestResult: ARHitTestResult, camera: ARCamera?) {
     // Average using several most recent positions.
-    recentFocusNodePositions = Array(recentFocusNodePositions.suffix(10))
+    recentFocusEntityPositions = Array(recentFocusEntityPositions.suffix(10))
 
     // Move to average of recent positions to avoid jitter.
-    let average = recentFocusNodePositions.reduce(
+    let average = recentFocusEntityPositions.reduce(
       SIMD3<Float>(repeating: 0), { $0 + $1 }
-    ) / Float(recentFocusNodePositions.count)
+    ) / Float(recentFocusEntityPositions.count)
     self.position = average
-    if self.scaleNodeBasedOnDistance {
+    if self.scaleEntityBasedOnDistance {
       self.scale = SIMD3<Float>(repeating: scaleBasedOnDistance(camera: camera))
     }
 
@@ -251,14 +251,14 @@ open class FocusEntity: Entity {
 
     // add to list of recent alignments
     if alignment != nil {
-      self.recentFocusNodeAlignments.append(alignment!)
+      self.recentFocusEntityAlignments.append(alignment!)
     }
 
     // Average using several most recent alignments.
-    self.recentFocusNodeAlignments = Array(self.recentFocusNodeAlignments.suffix(20))
+    self.recentFocusEntityAlignments = Array(self.recentFocusEntityAlignments.suffix(20))
 
-    let horizontalHistory = recentFocusNodeAlignments.filter({ $0 == .horizontal }).count
-    let verticalHistory = recentFocusNodeAlignments.filter({ $0 == .vertical }).count
+    let horizontalHistory = recentFocusEntityAlignments.filter({ $0 == .horizontal }).count
+    let verticalHistory = recentFocusEntityAlignments.filter({ $0 == .vertical }).count
 
     // Alignment is same as most of the history - change it
     if alignment == .horizontal && horizontalHistory > 15 ||
@@ -267,7 +267,7 @@ open class FocusEntity: Entity {
       if alignment != self.currentAlignment {
         shouldAnimateAlignmentChange = true
         self.currentAlignment = alignment
-        self.recentFocusNodeAlignments.removeAll()
+        self.recentFocusEntityAlignments.removeAll()
       }
     } else {
       // Alignment is different than most of the history - ignore it
@@ -321,14 +321,14 @@ open class FocusEntity: Entity {
 
   // MARK: Animations
 
-  /// Called whenever the state of the focus node changes
+  /// Called whenever the state of the focus entity changes
   ///
-  /// - Parameter newPlane: If the node is directly on a plane, is it a new plane to track
+  /// - Parameter newPlane: If the entity is directly on a plane, is it a new plane to track
   public func stateChanged(newPlane: Bool = false) {
     if self.onPlane {
-      /// Used when the node is tracking directly on a plane
+      /// Used when the entity is tracking directly on a plane
     } else {
-      /// Used when the node is tracking, but is estimating the plane
+      /// Used when the entity is tracking, but is estimating the plane
     }
     isAnimating = false
   }
@@ -363,9 +363,14 @@ open class FocusEntity: Entity {
 //    updateRenderOrder(for: self.positioningNode)
 //  }
 
+  @available(*, deprecated, renamed: "updateFocusEntity")
   public func updateFocusNode() {
+    self.updateFocusEntity()
+  }
+
+  public func updateFocusEntity() {
     guard let view = self.viewDelegate as? (ARView & ARSmartHitTest) else {
-      print("FocusNode viewDelegate must conform to ARSmartHitTest and be an ARView for now")
+      print("FocusEntity viewDelegate must conform to ARSmartHitTest and be an ARView for now")
       return
     }
     // Perform hit testing only when ARKit tracking is in a good state.
@@ -373,7 +378,7 @@ open class FocusEntity: Entity {
       case .normal = camera.trackingState
     else {
       self.state = .initializing
-      povNode.transform = view.cameraTransform
+      povEntity.transform = view.cameraTransform
       return
     }
     var result: ARHitTestResult?
@@ -383,7 +388,7 @@ open class FocusEntity: Entity {
       } else {
         DispatchQueue.main.async {
           self.screenCenter = view.screenCenter
-          self.updateFocusNode()
+          self.updateFocusEntity()
         }
         return
       }
@@ -394,7 +399,7 @@ open class FocusEntity: Entity {
     if let result = result {
       self.state = .detecting(hitTestResult: result, camera: camera)
     } else {
-      povNode.transform = view.cameraTransform
+      povEntity.transform = view.cameraTransform
       self.state = .initializing
     }
   }

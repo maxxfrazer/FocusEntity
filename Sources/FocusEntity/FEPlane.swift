@@ -28,7 +28,7 @@ public class FEPlane: FocusEntity {
     self.size = size
     super.init()
 //    opacity = 0.0
-    self.positioningNode.addChild(fillPlane)
+    self.positioningEntity.addChild(fillPlane)
   }
 
   required init?(coder aDecoder: NSCoder) {
@@ -38,7 +38,7 @@ public class FEPlane: FocusEntity {
   public required init() {
     self.size = 0.17
     super.init()
-    self.positioningNode.addChild(fillPlane)
+    self.positioningEntity.addChild(fillPlane)
   }
 
   // MARK: Animations
