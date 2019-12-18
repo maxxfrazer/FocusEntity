@@ -10,29 +10,25 @@ import SwiftUI
 import RealityKit
 
 struct ContentView: View {
-    var body: some View {
-        return ARViewContainer().edgesIgnoringSafeArea(.all)
-    }
+  var body: some View {
+    ARViewContainer().edgesIgnoringSafeArea(.all)
+  }
 }
 
 struct ARViewContainer: UIViewRepresentable {
 
-    func makeUIView(context: Context) -> FocusARView {
+  func makeUIView(context: Context) -> FocusARView {
+    FocusARView(frame: .zero)
+  }
 
-        let arView = FocusARView(frame: .zero)
-
-        return arView
-
-    }
-
-    func updateUIView(_ uiView: FocusARView, context: Context) {}
+  func updateUIView(_ uiView: FocusARView, context: Context) {}
 
 }
 
 #if DEBUG
 struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
+  static var previews: some View {
+    ContentView()
+  }
 }
 #endif

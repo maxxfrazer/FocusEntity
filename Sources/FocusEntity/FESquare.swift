@@ -11,7 +11,7 @@ import RealityKit
 /// This example class is taken almost entirely from Apple's own examples.
 /// I have simply moved some things around to keep only what's necessary
 ///
-/// An `SCNNode` which is used to provide uses with visual cues about the status of ARKit world tracking.
+/// An `Entity` which is used to provide uses with visual cues about the status of ARKit world tracking.
 /// - Tag: FocusSquare
 public class FESquare: FocusEntity {
 
@@ -88,11 +88,11 @@ public class FESquare: FocusEntity {
     s8.position += [sl / 2 - c, 0, sl - c]
 
     for segment in segments {
-      self.positioningNode.addChild(segment)
+      self.positioningEntity.addChild(segment)
       segment.open()
     }
-    self.positioningNode.addChild(fillPlane)
-    self.positioningNode.scale = SIMD3<Float>(repeating: FESquare.size * FESquare.scaleForClosedSquare)
+    self.positioningEntity.addChild(fillPlane)
+    self.positioningEntity.scale = SIMD3<Float>(repeating: FESquare.size * FESquare.scaleForClosedSquare)
 
     // Always render focus square on top of other content.
 //    self.displayNodeHierarchyOnTop(true)
@@ -122,12 +122,12 @@ public class FESquare: FocusEntity {
     SCNTransaction.begin()
     SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
     SCNTransaction.animationDuration = FESquare.animationDuration / 4
-//    positioningNode.opacity = 1.0
+//    positioningEntity.opacity = 1.0
     for segment in segments {
       segment.open()
     }
     SCNTransaction.completionBlock = {
-//      self.positioningNode.runAction(pulseAction(), forKey: "pulse")
+//      self.positioningEntity.runAction(pulseAction(), forKey: "pulse")
       // This is a safe operation because `SCNTransaction`'s completion block is called back on the main thread.
       self.isAnimating = false
     }
@@ -136,7 +136,7 @@ public class FESquare: FocusEntity {
     SCNTransaction.begin()
     SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
     SCNTransaction.animationDuration = FESquare.animationDuration / 4
-    positioningNode.scale = SIMD3<Float>(repeating: FESquare.size)
+    positioningEntity.scale = SIMD3<Float>(repeating: FESquare.size)
     SCNTransaction.commit()
   }
 
@@ -146,14 +146,14 @@ public class FESquare: FocusEntity {
       return
     }
     isOpen = false
-//    positioningNode.removeAction(forKey: "pulse")
-//    positioningNode.opacity = 1.0
+//    positioningEntity.removeAction(forKey: "pulse")
+//    positioningEntity.opacity = 1.0
 
     // Close animation
     SCNTransaction.begin()
     SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
     SCNTransaction.animationDuration = FESquare.animationDuration / 2
-//    positioningNode.opacity = 0.99
+//    positioningEntity.opacity = 0.99
     SCNTransaction.completionBlock = {
       SCNTransaction.begin()
       SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
@@ -169,9 +169,9 @@ public class FESquare: FocusEntity {
     SCNTransaction.commit()
 
     // Scale/bounce animation
-//    positioningNode.addAnimation(scaleAnimation(for: "transform.scale.x"), forKey: "transform.scale.x")
-//    positioningNode.addAnimation(scaleAnimation(for: "transform.scale.y"), forKey: "transform.scale.y")
-//    positioningNode.addAnimation(scaleAnimation(for: "transform.scale.z"), forKey: "transform.scale.z")
+//    positioningEntity.addAnimation(scaleAnimation(for: "transform.scale.x"), forKey: "transform.scale.x")
+//    positioningEntity.addAnimation(scaleAnimation(for: "transform.scale.y"), forKey: "transform.scale.y")
+//    positioningEntity.addAnimation(scaleAnimation(for: "transform.scale.z"), forKey: "transform.scale.z")
 
     if newPlane {
 //      let waitAction = SCNAction.wait(duration: FocusSquare.animationDuration * 0.75)
@@ -214,12 +214,11 @@ public class FESquare: FocusEntity {
     let length = CGFloat(1.0 - FESquare.thickness * 2 + correctionFactor)
 
 //    let plane = SCNPlane(width: length, height: length)
-//    let node = SCNNode(geometry: plane)
-    let node = ModelEntity(
+    let fillEntity = ModelEntity(
       mesh: MeshResource.generatePlane(width: Float(length), depth: Float(length)),
       materials: [UnlitMaterial(color: FESquare.fillColor.withAlphaComponent(0.0))]
     )
-    node.name = "fillPlane"
+    fillEntity.name = "fillPlane"
 
 //    let material = plane.firstMaterial!
 //    material.diffuse.contents = FocusEntitySquare.fillColor
@@ -228,7 +227,7 @@ public class FESquare: FocusEntity {
 //    material.lightingModel = .constant
 //    material.emission.contents = FocusEntitySquare.fillColor
 
-    return node
+    return fillEntity
   }()
 }
 

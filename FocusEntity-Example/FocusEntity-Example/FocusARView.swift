@@ -12,12 +12,15 @@ import Combine
 import ARKit
 import UIKit
 
-class FocusARView: ARView, ARSessionDelegate {
+class FocusARView: ARView {
   let focusSquare = FESquare()
   required init(frame frameRect: CGRect) {
     super.init(frame: frameRect)
     focusSquare.viewDelegate = self
-//    self.scene.addAnchor(focusSquare)
+    self.setupConfig()
+  }
+
+  func setupConfig() {
     let config = ARWorldTrackingConfiguration()
     config.planeDetection = [.horizontal, .vertical]
     session.delegate = self
@@ -27,8 +30,11 @@ class FocusARView: ARView, ARSessionDelegate {
   @objc required dynamic init?(coder decoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+}
 
+// Extension added to update FocusEntity on every frame update
+extension FocusARView: ARSessionDelegate {
   func session(_ session: ARSession, didUpdate frame: ARFrame) {
-    self.focusSquare.updateFocusNode()
+    self.focusSquare.updateFocusEntity()
   }
 }
