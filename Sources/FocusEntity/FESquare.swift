@@ -105,6 +105,7 @@ public class FESquare: FocusEntity {
   // MARK: Animations
 
   override public func stateChanged(newPlane: Bool) {
+    super.stateChanged()
     if self.onPlane {
       self.onPlaneAnimation(newPlane: newPlane)
     } else {
@@ -115,63 +116,30 @@ public class FESquare: FocusEntity {
   public func offPlaneAniation() {
     // Open animation
     guard !isOpen else {
-      isAnimating = false
       return
     }
+//    self.isAnimating = true
     isOpen = true
-    SCNTransaction.begin()
-    SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
-    SCNTransaction.animationDuration = FESquare.animationDuration / 4
-//    positioningEntity.opacity = 1.0
+
     for segment in segments {
       segment.open()
     }
-    SCNTransaction.completionBlock = {
-//      self.positioningEntity.runAction(pulseAction(), forKey: "pulse")
-      // This is a safe operation because `SCNTransaction`'s completion block is called back on the main thread.
-      self.isAnimating = false
-    }
-    SCNTransaction.commit()
-    // Add a scale/bounce animation.
-    SCNTransaction.begin()
-    SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
-    SCNTransaction.animationDuration = FESquare.animationDuration / 4
+//    self.isAnimating = false
     positioningEntity.scale = SIMD3<Float>(repeating: FESquare.size)
-    SCNTransaction.commit()
   }
 
   public func onPlaneAnimation(newPlane: Bool = false) {
     guard isOpen else {
-      isAnimating = false
       return
     }
-    isOpen = false
-//    positioningEntity.removeAction(forKey: "pulse")
-//    positioningEntity.opacity = 1.0
+//    self.isAnimating = true
+    self.isOpen = false
 
     // Close animation
-    SCNTransaction.begin()
-    SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
-    SCNTransaction.animationDuration = FESquare.animationDuration / 2
-//    positioningEntity.opacity = 0.99
-    SCNTransaction.completionBlock = {
-      SCNTransaction.begin()
-      SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
-      SCNTransaction.animationDuration = FESquare.animationDuration / 4
-      for segment in self.segments {
-        segment.close()
-      }
-      SCNTransaction.completionBlock = {
-        self.isAnimating = false
-      }
-      SCNTransaction.commit()
+    for segment in self.segments {
+      segment.close()
     }
-    SCNTransaction.commit()
-
-    // Scale/bounce animation
-//    positioningEntity.addAnimation(scaleAnimation(for: "transform.scale.x"), forKey: "transform.scale.x")
-//    positioningEntity.addAnimation(scaleAnimation(for: "transform.scale.y"), forKey: "transform.scale.y")
-//    positioningEntity.addAnimation(scaleAnimation(for: "transform.scale.z"), forKey: "transform.scale.z")
+//    self.isAnimating = false
 
     if newPlane {
 //      let waitAction = SCNAction.wait(duration: FocusSquare.animationDuration * 0.75)

@@ -17,6 +17,7 @@ class FocusARView: ARView {
   required init(frame frameRect: CGRect) {
     super.init(frame: frameRect)
     focusSquare.viewDelegate = self
+    focusSquare.delegate = self
     self.setupConfig()
   }
 
@@ -29,6 +30,15 @@ class FocusARView: ARView {
 
   @objc required dynamic init?(coder decoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+}
+
+extension FocusARView: FEDelegate {
+  func toTrackingState() {
+    print("tracking")
+  }
+  func toInitializingState() {
+    print("initializing")
   }
 }
 

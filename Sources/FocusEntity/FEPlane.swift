@@ -47,8 +47,8 @@ public class FEPlane: FocusEntity {
   ///
   /// - Parameter newPlane: If the cube is tracking a new surface for the first time
   override public func stateChanged(newPlane: Bool) {
+    super.stateChanged()
     if self.onPlane {
-//      positioningEntity.removeAction(forKey: "pulse")
       self.fillPlane.model?.materials[0] = SimpleMaterial(
         color: FEPlane.onColor, isMetallic: false
       )
@@ -58,7 +58,7 @@ public class FEPlane: FocusEntity {
         color: FEPlane.offColor, isMetallic: false
       )
     }
-    isAnimating = false
+//    isAnimating = false
   }
 
   // MARK: Convenience Methods
