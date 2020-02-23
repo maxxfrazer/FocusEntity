@@ -17,6 +17,11 @@ private extension UIView {
   }
 }
 
+@objc public protocol FEDelegate: AnyObject {
+  @objc optional func toTrackingState()
+  @objc optional func toInitializingState()
+}
+
 extension ARView: ARSmartHitTest {}
 
 /**
@@ -35,13 +40,16 @@ open class FocusEntity: Entity {
       view.scene.addAnchor(rootEntity)
     }
   }
+
+  public var delegate: FEDelegate?
+
   private var povEntity = AnchorEntity()
   private var rootEntity = AnchorEntity()
 
   // MARK: - Types
   public enum State: Equatable {
     case initializing
-    case detecting(hitTestResult: ARHitTestResult, camera: ARCamera?)
+    case tracking(hitTestResult: ARHitTestResult, camera: ARCamera?)
   }
 
   var screenCenter: CGPoint?
@@ -52,7 +60,7 @@ open class FocusEntity: Entity {
   var lastPosition: SIMD3<Float>? {
     switch state {
     case .initializing: return nil
-    case .detecting(let hitTestResult, _): return hitTestResult.worldTransform.translation
+    case .tracking(let hitTestResult, _): return hitTestResult.worldTransform.translation
     }
   }
 
@@ -68,10 +76,13 @@ open class FocusEntity: Entity {
       switch state {
       case .initializing:
         if oldValue != .initializing {
+          self.delegate?.toInitializingState?()
           displayAsBillboard()
         }
-      case let .detecting(hitTestResult, camera):
-        if oldValue == .initializing {
+      case let .tracking(hitTestResult, camera):
+        let stateChanged = oldValue == .initializing
+        if stateChanged {
+          self.delegate?.toTrackingState?()
           self.rootEntity.addChild(self)
         }
         if let planeAnchor = hitTestResult.anchor as? ARPlaneAnchor {
@@ -325,17 +336,10 @@ open class FocusEntity: Entity {
   ///
   /// - Parameter newPlane: If the entity is directly on a plane, is it a new plane to track
   public func stateChanged(newPlane: Bool = false) {
-    if self.onPlane {
-      /// Used when the entity is tracking directly on a plane
-    } else {
-      /// Used when the entity is tracking, but is estimating the plane
-    }
-    isAnimating = false
   }
 
   private func stateChangedSetup(newPlane: Bool = false) {
     guard !isAnimating else { return }
-    isAnimating = true
     self.stateChanged(newPlane: newPlane)
   }
 
@@ -397,7 +401,7 @@ open class FocusEntity: Entity {
     }
 
     if let result = result {
-      self.state = .detecting(hitTestResult: result, camera: camera)
+      self.state = .tracking(hitTestResult: result, camera: camera)
     } else {
       povEntity.transform = view.cameraTransform
       self.state = .initializing
