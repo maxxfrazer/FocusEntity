@@ -18,7 +18,10 @@ private extension UIView {
 }
 
 @objc public protocol FEDelegate: AnyObject {
+  /// Called when the FocusEntity is now in world space
   @objc optional func toTrackingState()
+
+  /// Called when the FocusEntity is tracking the camera
   @objc optional func toInitializingState()
 }
 
