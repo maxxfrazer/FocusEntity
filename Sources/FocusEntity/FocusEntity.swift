@@ -86,7 +86,6 @@ open class FocusEntity: Entity {
         let stateChanged = oldValue == .initializing
         if stateChanged {
           self.rootEntity.addChild(self)
-          self.delegate?.toTrackingState?()
         }
         if let planeAnchor = hitTestResult.anchor as? ARPlaneAnchor {
           entityOnPlane(for: hitTestResult, planeAnchor: planeAnchor, camera: camera)
@@ -94,6 +93,9 @@ open class FocusEntity: Entity {
         } else {
           entityOffPlane(hitTestResult, camera)
           currentPlaneAnchor = nil
+        }
+        if stateChanged {
+          self.delegate?.toTrackingState?()
         }
       }
     }
