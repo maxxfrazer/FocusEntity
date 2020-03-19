@@ -46,8 +46,8 @@ open class FocusEntity: Entity {
 
   public var delegate: FEDelegate?
 
-  private var povEntity = AnchorEntity()
-  private var rootEntity = AnchorEntity()
+  private var povEntity = AnchorEntity(.camera)
+  private var rootEntity = AnchorEntity(world: .zero)
 
   // MARK: - Types
   public enum State: Equatable {
@@ -142,13 +142,11 @@ open class FocusEntity: Entity {
     self.name = "FocusEntity"
     self.orientation = simd_quatf(angle: .pi / 2, axis: [1, 0, 0])
 
-    // Always render focus square on top of other content.
-//    self.displayNodeHierarchyOnTop(true)
-
     self.addChild(self.positioningEntity)
 
     // Start the focus square as a billboard.
-    self.displayAsBillboard()
+    displayAsBillboard()
+    self.delegate?.toInitializingState?()
   }
 
   required public init?(coder aDecoder: NSCoder) {
@@ -165,23 +163,12 @@ open class FocusEntity: Entity {
 //    runAction(.fadeOut(duration: 0.5), forKey: "hide")
   }
 
-  /// Unhides the focus square.
-  func unhide() {
-//    guard action(forKey: "unhide") == nil else { return }
-
-//    displayNodeHierarchyOnTop(true)
-//    runAction(.fadeIn(duration: 0.5), forKey: "unhide")
-  }
-
   /// Displays the focus square parallel to the camera plane.
   private func displayAsBillboard() {
     self.povEntity.addChild(self)
     self.onPlane = false
-    self.transform = .identity
-    self.orientation = simd_quatf(angle: .pi / 2, axis: [1, 0, 0])
-    position = [0, 0, -0.8]
 
-    unhide()
+    self.position = [0, 0, -0.8]
     stateChangedSetup()
   }
 
@@ -348,29 +335,9 @@ open class FocusEntity: Entity {
     self.stateChanged(newPlane: newPlane)
   }
 
-  /// - TODO: Animate this orientation change
   private func performAlignmentAnimation(to newOrientation: simd_quatf) {
     orientation = newOrientation
   }
-
-  /// - TODO: RealityKit to allow for setting render order
-  /// Sets the rendering order of the `positioningEntity` to show on top or under other scene content.
-//  func displayNodeHierarchyOnTop(_ isOnTop: Bool) {
-//    // Recursivley traverses the node's children to update the rendering order depending on the `isOnTop` parameter.
-//    func updateRenderOrder(for node: Entity) {
-//      node.render = isOnTop ? 2 : 0
-//
-//      for material in node.geometry?.materials ?? [] {
-//        material.readsFromDepthBuffer = !isOnTop
-//      }
-//
-//      for child in node.childNodes {
-//        updateRenderOrder(for: child)
-//      }
-//    }
-
-//    updateRenderOrder(for: self.positioningNode)
-//  }
 
   @available(*, deprecated, renamed: "updateFocusEntity")
   public func updateFocusNode() {
@@ -387,7 +354,6 @@ open class FocusEntity: Entity {
       case .normal = camera.trackingState
     else {
       self.state = .initializing
-      povEntity.transform = view.cameraTransform
       return
     }
     var result: ARHitTestResult?
@@ -408,7 +374,6 @@ open class FocusEntity: Entity {
     if let result = result {
       self.state = .tracking(hitTestResult: result, camera: camera)
     } else {
-      povEntity.transform = view.cameraTransform
       self.state = .initializing
     }
   }
