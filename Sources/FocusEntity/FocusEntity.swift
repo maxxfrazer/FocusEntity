@@ -8,6 +8,7 @@
 import RealityKit
 import ARKit
 import SmartHitTest
+import Combine
 
 private extension UIView {
   /// Center of the view
@@ -33,6 +34,14 @@ An `Entity` which is used to provide uses with visual cues about the status of A
 */
 open class FocusEntity: Entity {
 
+  public enum FEError: Error {
+    case noScene
+  }
+
+  private var myScene: Scene? {
+    (self.viewDelegate as? ARView)?.scene
+  }
+
   weak public var viewDelegate: ARSmartHitTest? {
     didSet {
       guard let view = self.viewDelegate as? (ARView & ARSmartHitTest) else {
@@ -44,10 +53,24 @@ open class FocusEntity: Entity {
     }
   }
 
-  public var delegate: FEDelegate?
+  private var updateCancellable: Cancellable?
+  public private(set) var isAutoUpdating: Bool = false
 
-  private var povEntity = AnchorEntity(.camera)
-  private var rootEntity = AnchorEntity(world: .zero)
+  @discardableResult func setAutoUpdate(to autoUpdate: Bool) -> FocusEntity.FEError? {
+    guard let scene = self.myScene else {
+      return .noScene
+    }
+    if autoUpdate {
+      self.updateCancellable = scene.subscribe(to: SceneEvents.Update.self, { _ in
+        self.updateFocusEntity()
+      })
+    } else {
+      self.updateCancellable?.cancel()
+    }
+    self.isAutoUpdating = autoUpdate
+    return nil
+  }
+  public var delegate: FEDelegate?
 
   // MARK: - Types
   public enum State: Equatable {
@@ -55,7 +78,10 @@ open class FocusEntity: Entity {
     case tracking(hitTestResult: ARHitTestResult, camera: ARCamera?)
   }
 
-  var screenCenter: CGPoint?
+  private var screenCenter: CGPoint?
+  private var povEntity = AnchorEntity(.camera)
+  private var rootEntity = AnchorEntity(world: .zero)
+
 
   // MARK: - Properties
 
