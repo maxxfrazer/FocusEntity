@@ -18,13 +18,13 @@ class FocusARView: ARView {
     super.init(frame: frameRect)
     focusSquare.viewDelegate = self
     focusSquare.delegate = self
+    focusSquare.setAutoUpdate(to: true)
     self.setupConfig()
   }
 
   func setupConfig() {
     let config = ARWorldTrackingConfiguration()
     config.planeDetection = [.horizontal, .vertical]
-    session.delegate = self
     session.run(config, options: [])
   }
 
@@ -39,12 +39,5 @@ extension FocusARView: FEDelegate {
   }
   func toInitializingState() {
     print("initializing")
-  }
-}
-
-// Extension added to update FocusEntity on every frame update
-extension FocusARView: ARSessionDelegate {
-  func session(_ session: ARSession, didUpdate frame: ARFrame) {
-    self.focusSquare.updateFocusEntity()
   }
 }
