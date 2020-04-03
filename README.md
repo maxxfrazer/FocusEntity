@@ -41,12 +41,12 @@ Add the URL of this repository to your Xcode 11+ Project.
 ---
 ## Usage
 
-See the [Example](./Example-RealityKit) for a full working example as can be seen in the GIF above
+See the [Example](./FocusEntity-Example) for a full working example as can be seen in the GIF above
 
 - After installing, import `FocusEntity` to your .swift file
-- Create an instance of `FESquare()`, or another `FocusEntity` class.
-- Set the  FocusEntity's `viewDelegate` to the `ARView`.
-- Using the `ARSessionDelegate`, define the [session(_:didUpate:)](https://developer.apple.com/documentation/arkit/arsessiondelegate/2865611-session) function with a call to `focusEntity.updateFocusNode()`
+- Create an instance of `let focusSquare = FESquare()`, or another `FocusEntity` class.
+- Set `focusSquare.viewDelegate` to the `ARView` it is to be rendered within.
+- Set the FocusEntity to auto-update: `focusSquare.setAutoUpdate(to: true)`
 
 
 If something's not making sense in the Example, [send me a tweet](https://twitter.com/maxxfrazer) or Fork & open a Pull Request on this repository to make something more clear.
