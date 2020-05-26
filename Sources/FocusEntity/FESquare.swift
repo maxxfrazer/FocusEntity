@@ -1,6 +1,6 @@
 //
 //  FESquare.swift
-//  
+//
 //
 //  Created by Max Cobb on 8/28/19.
 //
@@ -17,8 +17,8 @@ public class FESquare: FocusEntity {
 
   // MARK: - Types
   public enum State: Equatable {
-    case initializing
-    case detecting(hitTestResult: ARHitTestResult, camera: ARCamera?)
+      case initializing
+      case tracking(raycastResult: ARRaycastResult, camera: ARCamera?)
   }
 
   // MARK: - Configuration Properties

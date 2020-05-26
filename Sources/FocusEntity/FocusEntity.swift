@@ -7,7 +7,6 @@
 
 import RealityKit
 import ARKit
-import SmartHitTest
 import Combine
 
 private extension UIView {
@@ -26,8 +25,6 @@ private extension UIView {
   @objc optional func toInitializingState()
 }
 
-extension ARView: ARSmartHitTest {}
-
 /**
 An `Entity` which is used to provide uses with visual cues about the status of ARKit world tracking.
 - Tag: FocusSquare
@@ -39,17 +36,13 @@ open class FocusEntity: Entity {
   }
 
   private var myScene: Scene? {
-    (self.viewDelegate as? ARView)?.scene
+    self.viewDelegate?.scene
   }
 
-  weak public var viewDelegate: ARSmartHitTest? {
+  weak public var viewDelegate: ARView? {
     didSet {
-      guard let view = self.viewDelegate as? (ARView & ARSmartHitTest) else {
-        print("FocusEntity viewDelegate must conform to ARSmartHitTest for now")
-        return
-      }
-      view.scene.addAnchor(povEntity)
-      view.scene.addAnchor(rootEntity)
+      myScene?.addAnchor(povEntity)
+      myScene?.addAnchor(rootEntity)
     }
   }
 
@@ -75,7 +68,7 @@ open class FocusEntity: Entity {
   // MARK: - Types
   public enum State: Equatable {
     case initializing
-    case tracking(hitTestResult: ARHitTestResult, camera: ARCamera?)
+    case tracking(raycastResult: ARRaycastResult, camera: ARCamera?)
   }
 
   private var screenCenter: CGPoint?
@@ -89,13 +82,13 @@ open class FocusEntity: Entity {
   var lastPosition: SIMD3<Float>? {
     switch state {
     case .initializing: return nil
-    case .tracking(let hitTestResult, _): return hitTestResult.worldTransform.translation
+    case .tracking(let raycastResult, _): return raycastResult.worldTransform.translation
     }
   }
 
-  fileprivate func entityOffPlane(_ hitTestResult: ARHitTestResult, _ camera: ARCamera?) {
+  fileprivate func entityOffPlane(_ raycastResult: ARRaycastResult, _ camera: ARCamera?) {
     self.onPlane = false
-    displayOffPlane(for: hitTestResult, camera: camera)
+    displayOffPlane(for: raycastResult, camera: camera)
   }
 
   public var state: State = .initializing {
@@ -108,16 +101,16 @@ open class FocusEntity: Entity {
           displayAsBillboard()
           self.delegate?.toInitializingState?()
         }
-      case let .tracking(hitTestResult, camera):
+      case let .tracking(raycastResult, camera):
         let stateChanged = oldValue == .initializing
         if stateChanged {
           self.rootEntity.addChild(self)
         }
-        if let planeAnchor = hitTestResult.anchor as? ARPlaneAnchor {
-          entityOnPlane(for: hitTestResult, planeAnchor: planeAnchor, camera: camera)
+        if let planeAnchor = raycastResult.anchor as? ARPlaneAnchor {
+          entityOnPlane(for: raycastResult, planeAnchor: planeAnchor, camera: camera)
           currentPlaneAnchor = planeAnchor
         } else {
-          entityOffPlane(hitTestResult, camera)
+          entityOffPlane(raycastResult, camera)
           currentPlaneAnchor = nil
         }
         if stateChanged {
@@ -199,27 +192,27 @@ open class FocusEntity: Entity {
   }
 
   /// Called when a surface has been detected.
-  private func displayOffPlane(for hitTestResult: ARHitTestResult, camera: ARCamera?) {
+  private func displayOffPlane(for raycastResult: ARRaycastResult, camera: ARCamera?) {
     self.stateChangedSetup()
-    let position = hitTestResult.worldTransform.translation
+    let position = raycastResult.worldTransform.translation
     recentFocusEntityPositions.append(position)
-    updateTransform(for: position, hitTestResult: hitTestResult, camera: camera)
+    updateTransform(for: position, raycastResult: raycastResult, camera: camera)
   }
 
   /// Called when a plane has been detected.
-  private func entityOnPlane(for hitTestResult: ARHitTestResult, planeAnchor: ARPlaneAnchor, camera: ARCamera?) {
+  private func entityOnPlane(for raycastResult: ARRaycastResult, planeAnchor: ARPlaneAnchor, camera: ARCamera?) {
     self.onPlane = true
     self.stateChangedSetup(newPlane: !anchorsOfVisitedPlanes.contains(planeAnchor))
     anchorsOfVisitedPlanes.insert(planeAnchor)
-    let position = hitTestResult.worldTransform.translation
+    let position = raycastResult.worldTransform.translation
     recentFocusEntityPositions.append(position)
-    updateTransform(for: position, hitTestResult: hitTestResult, camera: camera)
+    updateTransform(for: position, raycastResult: raycastResult, camera: camera)
   }
 
   // MARK: Helper Methods
 
   /// Update the transform of the focus square to be aligned with the camera.
-  private func updateTransform(for position: SIMD3<Float>, hitTestResult: ARHitTestResult, camera: ARCamera?) {
+  private func updateTransform(for position: SIMD3<Float>, raycastResult: ARRaycastResult, camera: ARCamera?) {
     // Average using several most recent positions.
     recentFocusEntityPositions = Array(recentFocusEntityPositions.suffix(10))
 
@@ -254,11 +247,11 @@ open class FocusEntity: Entity {
     }
 
     if state != .initializing {
-      updateAlignment(for: hitTestResult, yRotationAngle: angle)
+      updateAlignment(for: raycastResult, yRotationAngle: angle)
     }
   }
 
-  private func updateAlignment(for hitTestResult: ARHitTestResult, yRotationAngle angle: Float) {
+  private func updateAlignment(for raycastResult: ARRaycastResult, yRotationAngle angle: Float) {
     // Abort if an animation is currently in progress.
     if isChangingAlignment {
       return
@@ -270,11 +263,11 @@ open class FocusEntity: Entity {
 
     // Determine current alignment
     var alignment: ARPlaneAnchor.Alignment?
-    if let planeAnchor = hitTestResult.anchor as? ARPlaneAnchor {
+    if let planeAnchor = raycastResult.anchor as? ARPlaneAnchor {
       alignment = planeAnchor.alignment
-    } else if hitTestResult.type == .estimatedHorizontalPlane {
+    } else if raycastResult.targetAlignment == .horizontal {
       alignment = .horizontal
-    } else if hitTestResult.type == .estimatedVerticalPlane {
+    } else if raycastResult.targetAlignment == .vertical {
       alignment = .vertical
     }
 
@@ -292,7 +285,7 @@ open class FocusEntity: Entity {
     // Alignment is same as most of the history - change it
     if alignment == .horizontal && horizontalHistory > 15 ||
       alignment == .vertical && verticalHistory > 10 ||
-      hitTestResult.anchor is ARPlaneAnchor {
+      raycastResult.anchor is ARPlaneAnchor {
       if alignment != self.currentAlignment {
         shouldAnimateAlignmentChange = true
         self.currentAlignment = alignment
@@ -305,7 +298,7 @@ open class FocusEntity: Entity {
     }
 
     if alignment == .vertical {
-      tempNode.simdOrientation = hitTestResult.worldTransform.orientation
+      tempNode.simdOrientation = raycastResult.worldTransform.orientation
       shouldAnimateAlignmentChange = true
     }
 
@@ -371,36 +364,21 @@ open class FocusEntity: Entity {
   }
 
   public func updateFocusEntity() {
-    guard let view = self.viewDelegate as? (ARView & ARSmartHitTest) else {
-      print("FocusEntity viewDelegate must conform to ARSmartHitTest and be an ARView for now")
-      return
-    }
-    // Perform hit testing only when ARKit tracking is in a good state.
-    guard let camera = view.session.currentFrame?.camera,
-      case .normal = camera.trackingState
-    else {
-      self.state = .initializing
-      return
-    }
-    var result: ARHitTestResult?
-    if !Thread.isMainThread {
-      if let center = self.screenCenter {
-        result = view.smartHitTest(center)
-      } else {
-        DispatchQueue.main.async {
-          self.screenCenter = view.screenCenter
-          self.updateFocusEntity()
-        }
-        return
-      }
-    } else {
-      result = view.smartHitTest(view.screenCenter)
-    }
-
-    if let result = result {
-      self.state = .tracking(hitTestResult: result, camera: camera)
-    } else {
-      self.state = .initializing
-    }
+    guard let view = self.viewDelegate else {
+         print("FocusEntity viewDelegate must conform to ARView")
+         return
+     }
+     // Perform hit testing only when ARKit tracking is in a good state.
+     guard let camera = view.session.currentFrame?.camera,
+         case .normal = camera.trackingState,
+         let query = viewDelegate?.getRaycastQuery(for: .any),
+         let result = viewDelegate?.castRay(for: query).first
+         else {
+             self.state = .initializing
+             return
+     }
+     
+     self.state = .tracking(raycastResult: result, camera: camera)
+     
   }
 }
