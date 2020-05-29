@@ -56,7 +56,8 @@ open class FocusEntity: Entity {
   private var updateCancellable: Cancellable?
   public private(set) var isAutoUpdating: Bool = false
 
-  @discardableResult func setAutoUpdate(to autoUpdate: Bool) -> FocusEntity.FEError? {
+  @discardableResult
+  public func setAutoUpdate(to autoUpdate: Bool) -> FocusEntity.FEError? {
     guard let scene = self.myScene else {
       return .noScene
     }
