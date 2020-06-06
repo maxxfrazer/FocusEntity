@@ -17,6 +17,76 @@ private extension UIView {
   }
 }
 
+public struct FocusEntityComponent: Component {
+  public enum Style {
+    case classic(color: Material.Color)
+    case colored(
+      onColor: Material.Color, offColor: Material.Color,
+      otherColor: Material.Color, mesh: MeshResource
+    )
+
+    internal struct Classic {
+      var color: Material.Color
+    }
+    internal struct Colored {
+      var onColor: Material.Color
+      var offColor: Material.Color
+      var otherColor: Material.Color
+      var mesh: MeshResource
+    }
+  }
+  let style: Style
+  var classicStyle: Style.Classic? {
+    switch self.style {
+    case .classic(let color):
+      return Style.Classic(color: color)
+    default:
+      return nil
+    }
+  }
+
+  var coloredStyle: Style.Colored? {
+    switch self.style {
+    case .colored(let onColor, let offColor, let otherColor, let mesh):
+      return Style.Colored(onColor: onColor, offColor: offColor, otherColor: otherColor, mesh: mesh)
+    default:
+      return nil
+    }
+  }
+  public static let classic = FocusEntityComponent(style: .classic(color: #colorLiteral(red: 1, green: 0.8, blue: 0, alpha: 1)))
+  public static let plane = FocusEntityComponent(style: .colored(onColor: .green, offColor: .red, otherColor: Material.Color.orange.withAlphaComponent(0.2), mesh: FocusEntityComponent.defaultPlane))
+  internal var isOpen = true
+  internal var segments: [FocusEntity.Segment] = []
+
+  static var defaultPlane: MeshResource {
+    let thickness = 0.018
+    let correctionFactor = thickness / 2 // correction to align lines perfectly
+    let length = Float(1.0 - thickness * 2 + correctionFactor)
+
+    return MeshResource.generatePlane(width: length, depth: length)
+  }
+  public init(style: Style) {
+    self.style = style
+  }
+}
+
+public protocol HasFocusEntity: Entity {}
+
+public extension HasFocusEntity {
+  var focusEntity: FocusEntityComponent {
+    get { self.components[FocusEntityComponent.self] ?? .classic }
+    set { self.components[FocusEntityComponent.self] = newValue }
+  }
+  var isOpen: Bool {
+    get { self.focusEntity.isOpen }
+    set { self.focusEntity.isOpen = newValue }
+  }
+  internal var segments: [FocusEntity.Segment] {
+    get { self.focusEntity.segments }
+    set { self.focusEntity.segments = newValue }
+  }
+}
+
 @objc public protocol FEDelegate: AnyObject {
   /// Called when the FocusEntity is now in world space
   @objc optional func toTrackingState()
@@ -29,33 +99,25 @@ private extension UIView {
 An `Entity` which is used to provide uses with visual cues about the status of ARKit world tracking.
 - Tag: FocusSquare
 */
-open class FocusEntity: Entity {
+open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
 
   public enum FEError: Error {
     case noScene
   }
 
-  private var myScene: Scene? {
-    self.viewDelegate?.scene
+  private var myScene: Scene {
+    self.arView.scene
   }
 
-  weak public var viewDelegate: ARView? {
-    didSet {
-      myScene?.addAnchor(povEntity)
-      myScene?.addAnchor(rootEntity)
-    }
-  }
+  public var arView: ARView
 
   private var updateCancellable: Cancellable?
   public private(set) var isAutoUpdating: Bool = false
 
   @discardableResult
   public func setAutoUpdate(to autoUpdate: Bool) -> FocusEntity.FEError? {
-    guard let scene = self.myScene else {
-      return .noScene
-    }
     if autoUpdate {
-      self.updateCancellable = scene.subscribe(to: SceneEvents.Update.self, { _ in
+      self.updateCancellable = self.myScene.subscribe(to: SceneEvents.Update.self, { _ in
         self.updateFocusEntity()
       })
     } else {
@@ -71,11 +133,6 @@ open class FocusEntity: Entity {
     case initializing
     case tracking(raycastResult: ARRaycastResult, camera: ARCamera?)
   }
-
-  private var screenCenter: CGPoint?
-  private var povEntity = AnchorEntity(.camera)
-  private var rootEntity = AnchorEntity(world: .zero)
-
 
   // MARK: - Properties
 
@@ -105,7 +162,7 @@ open class FocusEntity: Entity {
       case let .tracking(raycastResult, camera):
         let stateChanged = oldValue == .initializing
         if stateChanged {
-          self.rootEntity.addChild(self)
+          self.anchoring = AnchoringComponent(.world(transform: Transform.identity.matrix))
         }
         if let planeAnchor = raycastResult.anchor as? ARPlaneAnchor {
           entityOnPlane(for: raycastResult, planeAnchor: planeAnchor, camera: camera)
@@ -157,7 +214,11 @@ open class FocusEntity: Entity {
 
   // MARK: - Initialization
 
-  public required init() {
+  public convenience init(on arView: ARView, style: FocusEntityComponent.Style) {
+    self.init(on: arView, style: FocusEntityComponent(style: style))
+  }
+  public required init(on arView: ARView, style: FocusEntityComponent) {
+    self.arView = arView
     super.init()
     self.name = "FocusEntity"
     self.orientation = simd_quatf(angle: .pi / 2, axis: [1, 0, 0])
@@ -167,28 +228,39 @@ open class FocusEntity: Entity {
     // Start the focus square as a billboard.
     displayAsBillboard()
     self.delegate?.toInitializingState?()
+    arView.scene.addAnchor(self)
+    self.setAutoUpdate(to: true)
+    switch self.focusEntity.style {
+    case .colored(_, _, _, let mesh):
+      let fillPlane = ModelEntity(mesh: mesh)
+      self.positioningEntity.addChild(fillPlane)
+      self.fillPlane = fillPlane
+    case .classic:
+      self.setupClassic()
+    }
   }
 
-  required public init?(coder aDecoder: NSCoder) {
-    fatalError("\(#function) has not been implemented")
+  required public init() {
+    fatalError("init() has not been implemented")
   }
-
+  
   // MARK: - Appearance
 
   /// Hides the focus square.
   func hide() {
-//    guard action(forKey: "hide") == nil else { return }
-
-//    displayNodeHierarchyOnTop(false)
+    self.isEnabled = false
 //    runAction(.fadeOut(duration: 0.5), forKey: "hide")
   }
 
   /// Displays the focus square parallel to the camera plane.
   private func displayAsBillboard() {
-    self.povEntity.addChild(self)
+    self.anchoring = AnchoringComponent(.camera)
     self.onPlane = false
 
-    self.position = [0, 0, -0.8]
+    self.transform = .init(
+      scale: .one, rotation: simd_quatf(angle: .pi / 2, axis: [1, 0, 0]),
+      translation: [0, 0, -0.8]
+    )
     stateChangedSetup()
   }
 
@@ -348,7 +420,19 @@ open class FocusEntity: Entity {
   ///
   /// - Parameter newPlane: If the entity is directly on a plane, is it a new plane to track
   public func stateChanged(newPlane: Bool = false) {
+    switch self.focusEntity.style {
+    case .colored:
+      self.coloredStateChanged()
+    case .classic:
+      if self.onPlane {
+        self.onPlaneAnimation(newPlane: newPlane)
+      } else {
+        self.offPlaneAniation()
+      }
+    }
   }
+
+  internal var fillPlane: ModelEntity?
 
   private func stateChangedSetup(newPlane: Bool = false) {
     guard !isAnimating else { return }
@@ -364,22 +448,27 @@ open class FocusEntity: Entity {
     self.updateFocusEntity()
   }
 
+  private func raycastQuery() -> ARRaycastQuery {
+    let camTransform = self.arView.cameraTransform
+    let camDirection = camTransform.matrix.columns.2
+    return ARRaycastQuery(
+      origin: simd_float3(camTransform.translation),
+      direction: -[camDirection.x, camDirection.y, camDirection.z],
+      allowing: .estimatedPlane,
+      alignment: .any
+    )
+  }
+
   public func updateFocusEntity() {
-    guard let view = self.viewDelegate else {
-         print("FocusEntity viewDelegate must conform to ARView")
-         return
-     }
-     // Perform hit testing only when ARKit tracking is in a good state.
-     guard let camera = view.session.currentFrame?.camera,
-         case .normal = camera.trackingState,
-         let query = viewDelegate?.getRaycastQuery(for: .any),
-         let result = viewDelegate?.castRay(for: query).first
-         else {
-             self.state = .initializing
-             return
-     }
-     
-     self.state = .tracking(raycastResult: result, camera: camera)
-     
+    // Perform hit testing only when ARKit tracking is in a good state.
+    guard let camera = self.arView.session.currentFrame?.camera,
+      case .normal = camera.trackingState,
+      let result = self.arView.session.raycast(self.raycastQuery()).first
+    else {
+      self.state = .initializing
+      return
+    }
+
+    self.state = .tracking(raycastResult: result, camera: camera)
   }
 }

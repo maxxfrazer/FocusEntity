@@ -8,7 +8,7 @@
 import RealityKit
 import UIKit
 
-internal extension FESquare {
+internal extension FocusEntity {
   /*
   The focus square consists of eight segments as follows, which can be individually animated.
 
@@ -62,7 +62,7 @@ internal extension FESquare {
     let alignment: Alignment
     let plane: ModelComponent
 
-    init(name: String, corner: Corner, alignment: Alignment) {
+    init(name: String, corner: Corner, alignment: Alignment, color: Material.Color = #colorLiteral(red: 1, green: 0.8, blue: 0, alpha: 1)) {
       self.corner = corner
       self.alignment = alignment
 
@@ -70,12 +70,12 @@ internal extension FESquare {
       case .vertical:
         plane = ModelComponent(
           mesh: .generatePlane(width: 1, depth: 1),
-          materials: [UnlitMaterial(color: FESquare.primaryColor)]
+          materials: [UnlitMaterial(color: color)]
         )
       case .horizontal:
         plane = ModelComponent(
           mesh: .generatePlane(width: 1, depth: 1),
-          materials: [UnlitMaterial(color: FESquare.primaryColor)]
+          materials: [UnlitMaterial(color: color)]
         )
       }
       super.init()

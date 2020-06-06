@@ -13,20 +13,15 @@ import RealityKit
 ///
 /// An `Entity` which is used to provide uses with visual cues about the status of ARKit world tracking.
 /// - Tag: FocusSquare
-public class FESquare: FocusEntity {
+internal extension FocusEntity {
 
-  // MARK: - Types
-  public enum State: Equatable {
-      case initializing
-      case tracking(raycastResult: ARRaycastResult, camera: ARCamera?)
-  }
 
   // MARK: - Configuration Properties
 
-  /// Original size of the focus square in meters.
+  /// Original size of the focus square in meters. Not currently customizable
   static let size: Float = 0.17
 
-  /// Thickness of the focus square lines in meters.
+  /// Thickness of the focus square lines in meters. Not currently customizable
   static let thickness: Float = 0.018
 
   /// Scale factor for the focus square when it is closed, w.r.t. the original size.
@@ -35,191 +30,102 @@ public class FESquare: FocusEntity {
   /// Side length of the focus square segments when it is open (w.r.t. to a 1x1 square).
   static let sideLengthForOpenSegments: CGFloat = 0.2
 
-  /// Duration of the open/close animation
+  /// Duration of the open/close animation. Not currently used.
   static let animationDuration = 0.7
 
-  static var primaryColor = #colorLiteral(red: 1, green: 0.8, blue: 0, alpha: 1)
-
-  /// Color of the focus square fill.
+  /// Color of the focus square fill. Not currently used.
   static var fillColor = #colorLiteral(red: 1, green: 0.9254901961, blue: 0.4117647059, alpha: 1)
 
   /// Indicates whether the segments of the focus square are disconnected.
-  private var isOpen = true
+//  private var isOpen = true
 
   /// List of the segments in the focus square.
-  private var segments: [FESquare.Segment] = []
 
   // MARK: - Initialization
 
-  public required init() {
-    super.init()
+  func setupClassic() {
 //    opacity = 0.0
-
     /*
     The focus square consists of eight segments as follows, which can be individually animated.
 
-        s1  s2
+        s0  s1
         _   _
-    s3 |     | s4
+    s2 |     | s3
 
-    s5 |     | s6
+    s4 |     | s5
         -   -
-        s7  s8
+        s6  s7
     */
-    let s1 = Segment(name: "s1", corner: .topLeft, alignment: .horizontal)
-    let s2 = Segment(name: "s2", corner: .topRight, alignment: .horizontal)
-    let s3 = Segment(name: "s3", corner: .topLeft, alignment: .vertical)
-    let s4 = Segment(name: "s4", corner: .topRight, alignment: .vertical)
-    let s5 = Segment(name: "s5", corner: .bottomLeft, alignment: .vertical)
-    let s6 = Segment(name: "s6", corner: .bottomRight, alignment: .vertical)
-    let s7 = Segment(name: "s7", corner: .bottomLeft, alignment: .horizontal)
-    let s8 = Segment(name: "s8", corner: .bottomRight, alignment: .horizontal)
-    segments = [s1, s2, s3, s4, s5, s6, s7, s8]
+    guard let classicStyle = self.focusEntity.classicStyle else {
+      return
+    }
+
+    let segCorners: [(Corner, Alignment)] = [
+      (.topLeft, .horizontal), (.topRight, .horizontal),
+      (.topLeft, .vertical), (.topRight, .vertical),
+      (.bottomLeft, .vertical), (.bottomRight, .vertical),
+      (.bottomLeft, .horizontal), (.bottomRight, .horizontal),
+    ]
+    self.segments = segCorners.enumerated().map { (index, cornerAlign) -> Segment in
+      Segment(
+        name: "s\(index)",
+        corner: cornerAlign.0, alignment: cornerAlign.1,
+        color: classicStyle.color
+      )
+    }
 
     let sl: Float = 0.5  // segment length
-    let c: Float = FESquare.thickness / 2 // correction to align lines perfectly
-    s1.position += [-(sl / 2 - c), 0, -(sl - c)]
-    s2.position += [sl / 2 - c, 0, -(sl - c)]
-    s3.position += [-sl, 0, -sl / 2]
-    s4.position += [sl, 0, -sl / 2]
-    s5.position += [-sl, 0, sl / 2]
-    s6.position += [sl, 0, sl / 2]
-    s7.position += [-(sl / 2 - c), 0, sl - c]
-    s8.position += [sl / 2 - c, 0, sl - c]
+    let c: Float = FocusEntity.thickness / 2 // correction to align lines perfectly
+    segments[0].position += [-(sl / 2 - c), 0, -(sl - c)]
+    segments[1].position += [sl / 2 - c, 0, -(sl - c)]
+    segments[2].position += [-sl, 0, -sl / 2]
+    segments[3].position += [sl, 0, -sl / 2]
+    segments[4].position += [-sl, 0, sl / 2]
+    segments[5].position += [sl, 0, sl / 2]
+    segments[6].position += [-(sl / 2 - c), 0, sl - c]
+    segments[7].position += [sl / 2 - c, 0, sl - c]
 
     for segment in segments {
       self.positioningEntity.addChild(segment)
       segment.open()
     }
-    self.positioningEntity.addChild(fillPlane)
-    self.positioningEntity.scale = SIMD3<Float>(repeating: FESquare.size * FESquare.scaleForClosedSquare)
+
+//    self.positioningEntity.addChild(fillPlane)
+    self.positioningEntity.scale = SIMD3<Float>(repeating: FocusEntity.size * FocusEntity.scaleForClosedSquare)
 
     // Always render focus square on top of other content.
 //    self.displayNodeHierarchyOnTop(true)
   }
 
-  required init?(coder aDecoder: NSCoder) {
-    fatalError("\(#function) has not been implemented")
-  }
-
   // MARK: Animations
 
-  override public func stateChanged(newPlane: Bool) {
-    super.stateChanged()
-    if self.onPlane {
-      self.onPlaneAnimation(newPlane: newPlane)
-    } else {
-      self.offPlaneAniation()
-    }
-  }
-
-  public func offPlaneAniation() {
+  func offPlaneAniation() {
     // Open animation
     guard !isOpen else {
       return
     }
-//    self.isAnimating = true
     isOpen = true
 
     for segment in segments {
       segment.open()
     }
-//    self.isAnimating = false
-    positioningEntity.scale = SIMD3<Float>(repeating: FESquare.size)
+    positioningEntity.scale = .init(repeating: FocusEntity.size)
   }
 
-  public func onPlaneAnimation(newPlane: Bool = false) {
+  func onPlaneAnimation(newPlane: Bool = false) {
     guard isOpen else {
       return
     }
-//    self.isAnimating = true
     self.isOpen = false
 
     // Close animation
     for segment in self.segments {
       segment.close()
     }
-//    self.isAnimating = false
 
     if newPlane {
-//      let waitAction = SCNAction.wait(duration: FocusSquare.animationDuration * 0.75)
-//      let fadeInAction = SCNAction.fadeOpacity(to: 0.25, duration: FocusSquare.animationDuration * 0.125)
-//      let fadeOutAction = SCNAction.fadeOpacity(to: 0.0, duration: FocusEntitySquare.animationDuration * 0.125)
-//      fillPlane.runAction(SCNAction.sequence([waitAction, fadeInAction, fadeOutAction]))
-//
-//      let flashSquareAction = flashAnimation(duration: FocusEntitySquare.animationDuration * 0.25)
-//      for segment in segments {
-//        segment.runAction(.sequence([waitAction, flashSquareAction]))
-//      }
+      // New plane animation not implemented
     }
   }
 
-  // MARK: Convenience Methods
-
-  private func scaleAnimation(for keyPath: String) -> CAKeyframeAnimation {
-    let scaleAnimation = CAKeyframeAnimation(keyPath: keyPath)
-
-    let easeOut = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
-    let easeInOut = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
-    let linear = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
-
-    let size = FESquare.size
-    let ts = FESquare.size * FESquare.scaleForClosedSquare
-    let values = [size, size * 1.15, size * 1.15, ts * 0.97, ts]
-    let keyTimes: [NSNumber] = [0.00, 0.25, 0.50, 0.75, 1.00]
-    let timingFunctions = [easeOut, linear, easeOut, easeInOut]
-
-    scaleAnimation.values = values
-    scaleAnimation.keyTimes = keyTimes
-    scaleAnimation.timingFunctions = timingFunctions
-    scaleAnimation.duration = FESquare.animationDuration
-
-    return scaleAnimation
-  }
-
-  private lazy var fillPlane: ModelEntity = {
-    let correctionFactor = FESquare.thickness / 2 // correction to align lines perfectly
-    let length = CGFloat(1.0 - FESquare.thickness * 2 + correctionFactor)
-
-//    let plane = SCNPlane(width: length, height: length)
-    let fillEntity = ModelEntity(
-      mesh: MeshResource.generatePlane(width: Float(length), depth: Float(length)),
-      materials: [UnlitMaterial(color: FESquare.fillColor.withAlphaComponent(0.0))]
-    )
-    fillEntity.name = "fillPlane"
-
-//    let material = plane.firstMaterial!
-//    material.diffuse.contents = FocusEntitySquare.fillColor
-//    material.isDoubleSided = true
-//    material.ambient.contents = UIColor.black
-//    material.lightingModel = .constant
-//    material.emission.contents = FocusEntitySquare.fillColor
-
-    return fillEntity
-  }()
-}
-
-// MARK: - Animations and Actions
-
-private func pulseAction() -> SCNAction {
-  let pulseOutAction = SCNAction.fadeOpacity(to: 0.4, duration: 0.5)
-  let pulseInAction = SCNAction.fadeOpacity(to: 1.0, duration: 0.5)
-  pulseOutAction.timingMode = .easeInEaseOut
-  pulseInAction.timingMode = .easeInEaseOut
-
-  return SCNAction.repeatForever(SCNAction.sequence([pulseOutAction, pulseInAction]))
-}
-
-private func flashAnimation(duration: TimeInterval) -> SCNAction {
-  let action = SCNAction.customAction(duration: duration) { (node, elapsedTime) -> Void in
-    // animate color from HSB 48/100/100 to 48/30/100 and back
-    let elapsedTimePercentage = elapsedTime / CGFloat(duration)
-    let saturation = 2.8 * (elapsedTimePercentage - 0.5) * (elapsedTimePercentage - 0.5) + 0.3
-    if let material = node.geometry?.firstMaterial {
-      material.diffuse.contents = UIColor(
-        hue: 0.1333, saturation: saturation, brightness: 1.0, alpha: 1.0
-      )
-    }
-  }
-  return action
 }

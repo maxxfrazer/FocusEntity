@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,7 +13,6 @@
 		F301E0DA231462AB0028AAF1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F301E0D9231462AB0028AAF1 /* Preview Assets.xcassets */; };
 		F301E0DD231462AB0028AAF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F301E0DB231462AB0028AAF1 /* LaunchScreen.storyboard */; };
 		F301E0E5231462D90028AAF1 /* FocusARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301E0E4231462D90028AAF1 /* FocusARView.swift */; };
-		F301E0F7231515730028AAF1 /* SmartHitTest in Frameworks */ = {isa = PBXBuildFile; productRef = F301E0F6231515730028AAF1 /* SmartHitTest */; };
 		F3F29EE02317C0DA00C3864B /* FESquare.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F29EDB2317C0DA00C3864B /* FESquare.swift */; };
 		F3F29EE12317C0DA00C3864B /* FESquare+Segment.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F29EDC2317C0DA00C3864B /* FESquare+Segment.swift */; };
 		F3F29EE22317C0DA00C3864B /* float4x4+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F29EDD2317C0DA00C3864B /* float4x4+Extension.swift */; };
@@ -42,7 +41,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F301E0F7231515730028AAF1 /* SmartHitTest in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,7 +116,6 @@
 			);
 			name = "FocusEntity-Example";
 			packageProductDependencies = (
-				F301E0F6231515730028AAF1 /* SmartHitTest */,
 			);
 			productName = "FocusEntity-Example";
 			productReference = F301E0CD231462A90028AAF1 /* FocusEntity-Example.app */;
@@ -149,7 +146,6 @@
 			);
 			mainGroup = F301E0C4231462A90028AAF1;
 			packageReferences = (
-				F301E0F5231515730028AAF1 /* XCRemoteSwiftPackageReference "ARKit-SmartHitTest" */,
 			);
 			productRefGroup = F301E0CE231462A90028AAF1 /* Products */;
 			projectDirPath = "";
@@ -379,25 +375,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		F301E0F5231515730028AAF1 /* XCRemoteSwiftPackageReference "ARKit-SmartHitTest" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/maxxfrazer/ARKit-SmartHitTest";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		F301E0F6231515730028AAF1 /* SmartHitTest */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F301E0F5231515730028AAF1 /* XCRemoteSwiftPackageReference "ARKit-SmartHitTest" */;
-			productName = SmartHitTest;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F301E0C5231462A90028AAF1 /* Project object */;
 }
