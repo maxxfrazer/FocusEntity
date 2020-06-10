@@ -1,16 +1,14 @@
 //
-//  FEPlane.swift
-//  
+//  FocusEntity+Colored.swift
+//  FocusEntity
 //
 //  Created by Max Cobb on 8/26/19.
+//  Copyright © 2019 Max Cobb. All rights reserved.
 //
 
-import ARKit
 import RealityKit
-import QuartzCore
 
-/// A simple example subclass of FocusEntity which shows whether the plane is
-/// tracking on a known surface or estimating.
+/// An extension of FocusEntity holding the methods for the "colored" style.
 public extension FocusEntity {
 
   internal func coloredStateChanged() {

@@ -1,30 +1,24 @@
 # FocusEntity
 
-This package is based on the package [ARKit-FocusNode](https://github.com/maxxfrazer/ARKit-FocusNode), but adapted to work in Apple's Augmented Reality framework, RealityKit.
+This package is based on the package [ARKit-FocusNode](https://github.com/maxxfrazer/ARKit-FocusNode), but adapted to work in Apple's framework RealityKit.
 
-[![Lint Status](https://github.com/maxxfrazer/FocusEntity/workflows/swiftlint/badge.svg)](https://github.com/maxxfrazer/FocusEntity/actions)
-[![Build Status](https://github.com/maxxfrazer/FocusEntity/workflows/build/badge.svg)](https://github.com/maxxfrazer/FocusEntity/actions)
-[![Swift Package Manager](https://img.shields.io/badge/Swift_Package_Manager-v1.1.0-orange.svg?style=flat)](https://github.com/apple/swift-package-manager)
-[![Swift 5.0](https://img.shields.io/badge/Swift-5.0-orange.svg?style=flat)](https://swift.org/)
+
+<p align="center">
+  <img src="https://github.com/maxxfrazer/FocusEntity/workflows/swiftlint/badge.svg"/>
+  <img src="https://github.com/maxxfrazer/FocusEntity/workflows/build/badge.svg"/>
+  <img src="https://img.shields.io/github/v/release/maxxfrazer/FocusEntity?color=orange&label=SwiftPM&logo=swift"/>
+  <img src="https://img.shields.io/badge/platform-iOS-lightgrey"/>
+  <img src="https://img.shields.io/badge/Swift-5.2-orange?logo=swift"/>
+  <img src="https://img.shields.io/github/license/maxxfrazer/FocusEntity"/>
+</p>
 
 ![FocusEntity Example 1](media/FocusEntity-Example1.gif)
 
 [The Example](./Example-RealityKit) looks identical to the above GIF, which uses the FESquare class (Focus Entity Square).
 
 
-## ⚠️ iOS 13.2 bug ⚠️
-
-There is a crashing bug when using this library with iOS 13.2 and importing via Swift Package Manager
-
-The Swift bug has been reported here:
-https://bugs.swift.org/browse/SR-11564
-
-And there is a temporary solution, which involves setting the "Dead Code Stripping" property in your build's target to "No"
-
-Target > Build Settings > Linking > Dead Code Stripping
-
 ## Minimum Requirements
-  - Swift 5.0
+  - Swift 5.2
   - iOS 13.0 (RealityKit)
   - Xcode 11
 
@@ -44,9 +38,10 @@ Add the URL of this repository to your Xcode 11+ Project.
 See the [Example](./FocusEntity-Example) for a full working example as can be seen in the GIF above
 
 - After installing, import `FocusEntity` to your .swift file
-- Create an instance of `let focusSquare = FESquare()`, or another `FocusEntity` class.
-- Set `focusSquare.viewDelegate` to the `ARView` it is to be rendered within.
-- Set the FocusEntity to auto-update: `focusSquare.setAutoUpdate(to: true)`
+- Create an instance of FocusEntity:
+<br>```let focusSquare = FocusEntity(on: self.arView, style: .classic)```
+<br><br>(Optional)<br>
+- Set `focusSquare.delegate` to an object which conforms to `FocusEntityDelegate` if you wish to get callbacks for when the FocusEntity changes state.
 
 
 If something's not making sense in the Example, [send me a tweet](https://twitter.com/maxxfrazer) or Fork & open a Pull Request on this repository to make something more clear.

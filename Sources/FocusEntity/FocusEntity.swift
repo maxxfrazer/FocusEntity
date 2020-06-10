@@ -1,21 +1,14 @@
 //
 //  FocusEntity.swift
-//
+//  FocusEntity
 //
 //  Created by Max Cobb on 8/26/19.
+//  Copyright © 2019 Max Cobb. All rights reserved.
 //
 
 import RealityKit
 import ARKit
 import Combine
-
-private extension UIView {
-  /// Center of the view
-  var screenCenter: CGPoint {
-    let bounds = self.bounds
-    return CGPoint(x: bounds.midX, y: bounds.midY)
-  }
-}
 
 public struct FocusEntityComponent: Component {
   public enum Style {
@@ -87,7 +80,7 @@ public extension HasFocusEntity {
   }
 }
 
-@objc public protocol FEDelegate: AnyObject {
+@objc public protocol FocusEntityDelegate: AnyObject {
   /// Called when the FocusEntity is now in world space
   @objc optional func toTrackingState()
 
@@ -97,7 +90,6 @@ public extension HasFocusEntity {
 
 /**
 An `Entity` which is used to provide uses with visual cues about the status of ARKit world tracking.
-- Tag: FocusSquare
 */
 open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
 
@@ -114,19 +106,20 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
   private var updateCancellable: Cancellable?
   public private(set) var isAutoUpdating: Bool = false
 
-  @discardableResult
-  public func setAutoUpdate(to autoUpdate: Bool) -> FocusEntity.FEError? {
+  public func setAutoUpdate(to autoUpdate: Bool) {
+    if autoUpdate == self.isAutoUpdating {
+      return
+    }
     if autoUpdate {
-      self.updateCancellable = self.myScene.subscribe(to: SceneEvents.Update.self, { _ in
-        self.updateFocusEntity()
-      })
+      self.updateCancellable = self.myScene.subscribe(
+        to: SceneEvents.Update.self, self.updateFocusEntity
+      )
     } else {
       self.updateCancellable?.cancel()
     }
     self.isAutoUpdating = autoUpdate
-    return nil
   }
-  public var delegate: FEDelegate?
+  public var delegate: FocusEntityDelegate?
 
   // MARK: - Types
   public enum State: Equatable {
@@ -236,7 +229,10 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
       self.positioningEntity.addChild(fillPlane)
       self.fillPlane = fillPlane
     case .classic:
-      self.setupClassic()
+      guard let classicStyle = self.focusEntity.classicStyle else {
+        return
+      }
+      self.setupClassic(classicStyle)
     }
   }
 
@@ -459,7 +455,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     )
   }
 
-  public func updateFocusEntity() {
+  public func updateFocusEntity(event: SceneEvents.Update? = nil) {
     // Perform hit testing only when ARKit tracking is in a good state.
     guard let camera = self.arView.session.currentFrame?.camera,
       case .normal = camera.trackingState,

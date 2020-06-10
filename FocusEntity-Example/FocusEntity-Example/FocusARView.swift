@@ -31,7 +31,7 @@ class FocusARView: ARView {
   }
 }
 
-extension FocusARView: FEDelegate {
+extension FocusARView: FocusEntityDelegate {
   func toTrackingState() {
     print("tracking")
   }

@@ -13,11 +13,11 @@
 		F301E0DA231462AB0028AAF1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F301E0D9231462AB0028AAF1 /* Preview Assets.xcassets */; };
 		F301E0DD231462AB0028AAF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F301E0DB231462AB0028AAF1 /* LaunchScreen.storyboard */; };
 		F301E0E5231462D90028AAF1 /* FocusARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301E0E4231462D90028AAF1 /* FocusARView.swift */; };
-		F3F29EE02317C0DA00C3864B /* FESquare.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F29EDB2317C0DA00C3864B /* FESquare.swift */; };
-		F3F29EE12317C0DA00C3864B /* FESquare+Segment.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F29EDC2317C0DA00C3864B /* FESquare+Segment.swift */; };
+		F3F29EE02317C0DA00C3864B /* FocusEntity+Classic.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F29EDB2317C0DA00C3864B /* FocusEntity+Classic.swift */; };
+		F3F29EE12317C0DA00C3864B /* FocusEntity+Segment.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F29EDC2317C0DA00C3864B /* FocusEntity+Segment.swift */; };
 		F3F29EE22317C0DA00C3864B /* float4x4+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F29EDD2317C0DA00C3864B /* float4x4+Extension.swift */; };
 		F3F29EE32317C0DA00C3864B /* FocusEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F29EDE2317C0DA00C3864B /* FocusEntity.swift */; };
-		F3F29EE42317C0DA00C3864B /* FEPlane.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F29EDF2317C0DA00C3864B /* FEPlane.swift */; };
+		F3F29EE42317C0DA00C3864B /* FocusEntity+Colored.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F29EDF2317C0DA00C3864B /* FocusEntity+Colored.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,11 +29,11 @@
 		F301E0DC231462AB0028AAF1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F301E0DE231462AB0028AAF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F301E0E4231462D90028AAF1 /* FocusARView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusARView.swift; sourceTree = "<group>"; };
-		F3F29EDB2317C0DA00C3864B /* FESquare.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FESquare.swift; sourceTree = "<group>"; };
-		F3F29EDC2317C0DA00C3864B /* FESquare+Segment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "FESquare+Segment.swift"; path = "../../Sources/FocusEntity/FESquare+Segment.swift"; sourceTree = "<group>"; };
+		F3F29EDB2317C0DA00C3864B /* FocusEntity+Classic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FocusEntity+Classic.swift"; sourceTree = "<group>"; };
+		F3F29EDC2317C0DA00C3864B /* FocusEntity+Segment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FocusEntity+Segment.swift"; sourceTree = "<group>"; };
 		F3F29EDD2317C0DA00C3864B /* float4x4+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "float4x4+Extension.swift"; path = "../../Sources/FocusEntity/float4x4+Extension.swift"; sourceTree = "<group>"; };
 		F3F29EDE2317C0DA00C3864B /* FocusEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FocusEntity.swift; path = ../../Sources/FocusEntity/FocusEntity.swift; sourceTree = "<group>"; };
-		F3F29EDF2317C0DA00C3864B /* FEPlane.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FEPlane.swift; sourceTree = "<group>"; };
+		F3F29EDF2317C0DA00C3864B /* FocusEntity+Colored.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FocusEntity+Colored.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,9 +89,9 @@
 		F301E0EE231515370028AAF1 /* FocusEntity */ = {
 			isa = PBXGroup;
 			children = (
-				F3F29EDF2317C0DA00C3864B /* FEPlane.swift */,
-				F3F29EDB2317C0DA00C3864B /* FESquare.swift */,
-				F3F29EDC2317C0DA00C3864B /* FESquare+Segment.swift */,
+				F3F29EDF2317C0DA00C3864B /* FocusEntity+Colored.swift */,
+				F3F29EDB2317C0DA00C3864B /* FocusEntity+Classic.swift */,
+				F3F29EDC2317C0DA00C3864B /* FocusEntity+Segment.swift */,
 				F3F29EDD2317C0DA00C3864B /* float4x4+Extension.swift */,
 				F3F29EDE2317C0DA00C3864B /* FocusEntity.swift */,
 			);
@@ -176,11 +176,11 @@
 			files = (
 				F3F29EE32317C0DA00C3864B /* FocusEntity.swift in Sources */,
 				F301E0D3231462A90028AAF1 /* ContentView.swift in Sources */,
-				F3F29EE02317C0DA00C3864B /* FESquare.swift in Sources */,
-				F3F29EE42317C0DA00C3864B /* FEPlane.swift in Sources */,
+				F3F29EE02317C0DA00C3864B /* FocusEntity+Classic.swift in Sources */,
+				F3F29EE42317C0DA00C3864B /* FocusEntity+Colored.swift in Sources */,
 				F301E0D1231462A90028AAF1 /* AppDelegate.swift in Sources */,
 				F3F29EE22317C0DA00C3864B /* float4x4+Extension.swift in Sources */,
-				F3F29EE12317C0DA00C3864B /* FESquare+Segment.swift in Sources */,
+				F3F29EE12317C0DA00C3864B /* FocusEntity+Segment.swift in Sources */,
 				F301E0E5231462D90028AAF1 /* FocusARView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -319,14 +319,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"FocusEntity-Example/Preview Content\"";
-				DEVELOPMENT_TEAM = N2RTJDRM64;
+				DEVELOPMENT_TEAM = 278494H572;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "FocusEntity-Example/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "cobb.max.FocusEntity-Example";
+				PRODUCT_BUNDLE_IDENTIFIER = "uk.rocketar.FocusEntity-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -339,14 +339,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"FocusEntity-Example/Preview Content\"";
-				DEVELOPMENT_TEAM = N2RTJDRM64;
+				DEVELOPMENT_TEAM = 278494H572;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "FocusEntity-Example/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "cobb.max.FocusEntity-Example";
+				PRODUCT_BUNDLE_IDENTIFIER = "uk.rocketar.FocusEntity-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

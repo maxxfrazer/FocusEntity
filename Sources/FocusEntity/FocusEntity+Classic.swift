@@ -1,18 +1,14 @@
 //
-//  FESquare.swift
-//
+//  FocusEntity+Classic.swift
+//  FocusEntity
 //
 //  Created by Max Cobb on 8/28/19.
+//  Copyright © 2019 Max Cobb. All rights reserved.
 //
 
-import ARKit
 import RealityKit
 
-/// This example class is taken almost entirely from Apple's own examples.
-/// I have simply moved some things around to keep only what's necessary
-///
-/// An `Entity` which is used to provide uses with visual cues about the status of ARKit world tracking.
-/// - Tag: FocusSquare
+/// An extension of FocusEntity holding the methods for the "classic" style.
 internal extension FocusEntity {
 
 
@@ -28,13 +24,13 @@ internal extension FocusEntity {
   static let scaleForClosedSquare: Float = 0.97
 
   /// Side length of the focus square segments when it is open (w.r.t. to a 1x1 square).
-  static let sideLengthForOpenSegments: CGFloat = 0.2
+//  static let sideLengthForOpenSegments: CGFloat = 0.2
 
   /// Duration of the open/close animation. Not currently used.
   static let animationDuration = 0.7
 
   /// Color of the focus square fill. Not currently used.
-  static var fillColor = #colorLiteral(red: 1, green: 0.9254901961, blue: 0.4117647059, alpha: 1)
+//  static var fillColor = #colorLiteral(red: 1, green: 0.9254901961, blue: 0.4117647059, alpha: 1)
 
   /// Indicates whether the segments of the focus square are disconnected.
 //  private var isOpen = true
@@ -43,7 +39,7 @@ internal extension FocusEntity {
 
   // MARK: - Initialization
 
-  func setupClassic() {
+  func setupClassic(_ classicStyle: FocusEntityComponent.Style.Classic) {
 //    opacity = 0.0
     /*
     The focus square consists of eight segments as follows, which can be individually animated.
@@ -56,9 +52,6 @@ internal extension FocusEntity {
         -   -
         s6  s7
     */
-    guard let classicStyle = self.focusEntity.classicStyle else {
-      return
-    }
 
     let segCorners: [(Corner, Alignment)] = [
       (.topLeft, .horizontal), (.topRight, .horizontal),
@@ -69,7 +62,8 @@ internal extension FocusEntity {
     self.segments = segCorners.enumerated().map { (index, cornerAlign) -> Segment in
       Segment(
         name: "s\(index)",
-        corner: cornerAlign.0, alignment: cornerAlign.1,
+        corner: cornerAlign.0,
+        alignment: cornerAlign.1,
         color: classicStyle.color
       )
     }
