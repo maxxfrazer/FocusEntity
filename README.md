@@ -4,17 +4,17 @@ This package is based on the package [ARKit-FocusNode](https://github.com/maxxfr
 
 
 <p align="center">
+  <img src="https://img.shields.io/badge/platform-iOS-lightgrey"/>
+  <img src="https://img.shields.io/github/v/release/maxxfrazer/FocusEntity?color=orange&label=SwiftPM&logo=swift"/>
+  <img src="https://img.shields.io/badge/Swift-5.2-orange?logo=swift"/>
   <img src="https://github.com/maxxfrazer/FocusEntity/workflows/swiftlint/badge.svg"/>
   <img src="https://github.com/maxxfrazer/FocusEntity/workflows/build/badge.svg"/>
-  <img src="https://img.shields.io/github/v/release/maxxfrazer/FocusEntity?color=orange&label=SwiftPM&logo=swift"/>
-  <img src="https://img.shields.io/badge/platform-iOS-lightgrey"/>
-  <img src="https://img.shields.io/badge/Swift-5.2-orange?logo=swift"/>
   <img src="https://img.shields.io/github/license/maxxfrazer/FocusEntity"/>
 </p>
 
 ![FocusEntity Example 1](media/FocusEntity-Example1.gif)
 
-[The Example](./Example-RealityKit) looks identical to the above GIF, which uses the FESquare class (Focus Entity Square).
+[The Example](./Example-RealityKit) looks identical to the above GIF, which uses the FocusEntity classic style.
 
 
 ## Minimum Requirements
