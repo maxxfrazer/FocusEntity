@@ -13,6 +13,8 @@
 		F301E0DA231462AB0028AAF1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F301E0D9231462AB0028AAF1 /* Preview Assets.xcassets */; };
 		F301E0DD231462AB0028AAF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F301E0DB231462AB0028AAF1 /* LaunchScreen.storyboard */; };
 		F301E0E5231462D90028AAF1 /* FocusARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301E0E4231462D90028AAF1 /* FocusARView.swift */; };
+		F3D758E424992EAC0019A821 /* FocusEntity+Alignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D758E324992EAC0019A821 /* FocusEntity+Alignment.swift */; };
+		F3D758E6249930080019A821 /* FocusEntityComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D758E5249930080019A821 /* FocusEntityComponent.swift */; };
 		F3F29EE02317C0DA00C3864B /* FocusEntity+Classic.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F29EDB2317C0DA00C3864B /* FocusEntity+Classic.swift */; };
 		F3F29EE12317C0DA00C3864B /* FocusEntity+Segment.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F29EDC2317C0DA00C3864B /* FocusEntity+Segment.swift */; };
 		F3F29EE22317C0DA00C3864B /* float4x4+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F29EDD2317C0DA00C3864B /* float4x4+Extension.swift */; };
@@ -29,6 +31,8 @@
 		F301E0DC231462AB0028AAF1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F301E0DE231462AB0028AAF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F301E0E4231462D90028AAF1 /* FocusARView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusARView.swift; sourceTree = "<group>"; };
+		F3D758E324992EAC0019A821 /* FocusEntity+Alignment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FocusEntity+Alignment.swift"; sourceTree = "<group>"; };
+		F3D758E5249930080019A821 /* FocusEntityComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FocusEntityComponent.swift; sourceTree = "<group>"; };
 		F3F29EDB2317C0DA00C3864B /* FocusEntity+Classic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FocusEntity+Classic.swift"; sourceTree = "<group>"; };
 		F3F29EDC2317C0DA00C3864B /* FocusEntity+Segment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FocusEntity+Segment.swift"; sourceTree = "<group>"; };
 		F3F29EDD2317C0DA00C3864B /* float4x4+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "float4x4+Extension.swift"; path = "../../Sources/FocusEntity/float4x4+Extension.swift"; sourceTree = "<group>"; };
@@ -92,8 +96,10 @@
 				F3F29EDF2317C0DA00C3864B /* FocusEntity+Colored.swift */,
 				F3F29EDB2317C0DA00C3864B /* FocusEntity+Classic.swift */,
 				F3F29EDC2317C0DA00C3864B /* FocusEntity+Segment.swift */,
+				F3D758E5249930080019A821 /* FocusEntityComponent.swift */,
 				F3F29EDD2317C0DA00C3864B /* float4x4+Extension.swift */,
 				F3F29EDE2317C0DA00C3864B /* FocusEntity.swift */,
+				F3D758E324992EAC0019A821 /* FocusEntity+Alignment.swift */,
 			);
 			name = FocusEntity;
 			path = ../Sources/FocusEntity;
@@ -174,6 +180,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3D758E424992EAC0019A821 /* FocusEntity+Alignment.swift in Sources */,
 				F3F29EE32317C0DA00C3864B /* FocusEntity.swift in Sources */,
 				F301E0D3231462A90028AAF1 /* ContentView.swift in Sources */,
 				F3F29EE02317C0DA00C3864B /* FocusEntity+Classic.swift in Sources */,
@@ -182,6 +189,7 @@
 				F3F29EE22317C0DA00C3864B /* float4x4+Extension.swift in Sources */,
 				F3F29EE12317C0DA00C3864B /* FocusEntity+Segment.swift in Sources */,
 				F301E0E5231462D90028AAF1 /* FocusARView.swift in Sources */,
+				F3D758E6249930080019A821 /* FocusEntityComponent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
