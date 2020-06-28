@@ -127,8 +127,10 @@ extension FocusEntity {
     return normalized
   }
 
-  internal func getCamVector() -> (position: SIMD3<Float>, direciton: SIMD3<Float>) {
-    let camTransform = self.arView.cameraTransform
+  internal func getCamVector() -> (position: SIMD3<Float>, direciton: SIMD3<Float>)? {
+    guard let camTransform = self.arView?.cameraTransform else {
+      return nil
+    }
     let camDirection = camTransform.matrix.columns.2
     return (camTransform.translation, -[camDirection.x, camDirection.y, camDirection.z])
   }
@@ -137,12 +139,14 @@ extension FocusEntity {
   /// - Returns: ARRaycastResult if an existing plane geometry or an estimated plane are found, otherwise nil.
   internal func smartRaycast() -> ARRaycastResult? {
     // Perform the hit test.
-    let (camPos, camDir) = self.getCamVector()
+    guard let (camPos, camDir) = self.getCamVector() else {
+      return nil
+    }
     let rcQuery = ARRaycastQuery(
       origin: camPos, direction: camDir,
       allowing: .estimatedPlane, alignment: .any
     )
-    let results = self.arView.session.raycast(rcQuery)
+    let results = self.arView?.session.raycast(rcQuery) ?? []
 
     // 1. Check for a result on an existing plane using geometry.
     if let existingPlaneUsingGeometryResult = results.first(

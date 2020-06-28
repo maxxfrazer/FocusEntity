@@ -44,11 +44,35 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     case noScene
   }
 
-  private var myScene: Scene {
-    self.arView.scene
+  private var myScene: Scene? {
+    self.arView?.scene
   }
 
-  public var arView: ARView
+  internal var arView: ARView?
+
+  /// For moving the FocusEntity to a whole new ARView
+  /// - Parameter view: The destination `ARView`
+  public func moveTo(view: ARView) {
+    let wasUpdating = self.isAutoUpdating
+    self.setAutoUpdate(to: false)
+    self.arView = view
+    view.scene.addAnchor(self)
+    if wasUpdating {
+      self.setAutoUpdate(to: true)
+    }
+  }
+
+  /// Destroy this FocusEntity and its references to any ARViews
+  /// Without calling this, your ARView could stay in memory.
+  public func destroy() {
+    self.setAutoUpdate(to: false)
+    self.delegate = nil
+    self.arView = nil
+    for child in children {
+      child.removeFromParent()
+    }
+    self.removeFromParent()
+  }
 
   private var updateCancellable: Cancellable?
   public private(set) var isAutoUpdating: Bool = false
@@ -57,8 +81,11 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     if autoUpdate == self.isAutoUpdating {
       return
     }
+    if self.arView == nil {
+      return
+    }
     if autoUpdate {
-      self.updateCancellable = self.myScene.subscribe(
+      self.updateCancellable = self.myScene?.subscribe(
         to: SceneEvents.Update.self, self.updateFocusEntity
       )
     } else {
@@ -251,7 +278,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
 
   public func updateFocusEntity(event: SceneEvents.Update? = nil) {
     // Perform hit testing only when ARKit tracking is in a good state.
-    guard let camera = self.arView.session.currentFrame?.camera,
+    guard let camera = self.arView?.session.currentFrame?.camera,
       case .normal = camera.trackingState,
       let result = self.smartRaycast()
     else {

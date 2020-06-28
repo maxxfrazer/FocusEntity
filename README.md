@@ -48,8 +48,6 @@ If something's not making sense in the Example, [send me a tweet](https://twitte
 
 I'm hoping to make the animations look a little smoother over time, but any and all contributions are welcome and encouraged.
 
-Please follow the guide for creating GitHub Issues, otherwise I may simply close them.
-
 ---
 
 The original code to create this repository has been adapted from one of Apple's examples from 2018, [license also included](LICENSE.origin). I have merely adapted the code to be used and distributed from within a Swift Package, and now further adapted to work with [RealityKit](https://developer.apple.com/documentation/realitykit).
