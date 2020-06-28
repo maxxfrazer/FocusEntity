@@ -6,6 +6,7 @@
 //  Copyright © 2019 Max Cobb. All rights reserved.
 //
 
+#if canImport(ARKit)
 import RealityKit
 
 /// An extension of FocusEntity holding the methods for the "colored" style.
@@ -26,3 +27,4 @@ public extension FocusEntity {
     )
   }
 }
+#endif

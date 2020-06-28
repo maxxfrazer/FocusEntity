@@ -6,6 +6,7 @@
 //  Copyright © 2019 Max Cobb. All rights reserved.
 //
 
+#if canImport(ARKit)
 import RealityKit
 
 public struct FocusEntityComponent: Component {
@@ -60,3 +61,4 @@ public struct FocusEntityComponent: Component {
     self.style = style
   }
 }
+#endif

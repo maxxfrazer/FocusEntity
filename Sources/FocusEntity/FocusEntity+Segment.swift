@@ -6,6 +6,7 @@
 //  Copyright © 2019 Max Cobb. All rights reserved.
 //
 
+#if canImport(ARKit)
 import RealityKit
 
 internal extension FocusEntity {
@@ -153,3 +154,4 @@ internal extension FocusEntity {
 
   }
 }
+#endif

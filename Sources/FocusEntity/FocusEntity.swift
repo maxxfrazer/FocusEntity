@@ -6,6 +6,7 @@
 //  Copyright © 2019 Max Cobb. All rights reserved.
 //
 
+#if canImport(ARKit)
 import RealityKit
 import ARKit
 import Combine
@@ -289,3 +290,14 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     self.state = .tracking(raycastResult: result, camera: camera)
   }
 }
+#else
+/**
+FocusEntity is only enabled for environments which can import ARKit.
+*/
+open class FocusEntity {
+  init?() {
+    print("This is not supported when ARKit cannot be imported.")
+    return nil
+  }
+}
+#endif
