@@ -13,13 +13,11 @@ import ARKit
 import UIKit
 
 class FocusARView: ARView {
-  let focusSquare = FESquare()
+  var focusEntity: FocusEntity?
   required init(frame frameRect: CGRect) {
     super.init(frame: frameRect)
-    focusSquare.viewDelegate = self
-    focusSquare.delegate = self
-    focusSquare.setAutoUpdate(to: true)
     self.setupConfig()
+    self.focusEntity = FocusEntity(on: self, style: .classic)
   }
 
   func setupConfig() {
@@ -33,7 +31,7 @@ class FocusARView: ARView {
   }
 }
 
-extension FocusARView: FEDelegate {
+extension FocusARView: FocusEntityDelegate {
   func toTrackingState() {
     print("tracking")
   }

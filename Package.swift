@@ -9,15 +9,9 @@ let package = Package(
   products: [
     .library(name: "FocusEntity", targets: ["FocusEntity"])
   ],
-  dependencies: [
-//  .package(path: "../ARKit-SmartHitTest")
-    .package(
-      url: "https://github.com/maxxfrazer/ARKit-SmartHitTest",
-      .upToNextMajor(from: "2.0.0")
-    )
-  ],
+  dependencies: [],
   targets: [
-    .target(name: "FocusEntity", dependencies: ["SmartHitTest"])
+    .target(name: "FocusEntity", dependencies: [])
   ],
   swiftLanguageVersions: [.v5]
 )

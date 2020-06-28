@@ -1,35 +1,35 @@
 //
-//  File.swift
-//  
+//  FocusEntity+Segment.swift
+//  FocusEntity
 //
 //  Created by Max Cobb on 8/28/19.
+//  Copyright © 2019 Max Cobb. All rights reserved.
 //
 
 import RealityKit
-import UIKit
 
-internal extension FESquare {
+internal extension FocusEntity {
   /*
   The focus square consists of eight segments as follows, which can be individually animated.
 
-      s1  s2
-      _   _
-  s3 |     | s4
+        s0  s1
+        _   _
+    s2 |     | s3
 
-  s5 |     | s6
-      -   -
-      s7  s8
+    s4 |     | s5
+        -   -
+        s6  s7
   */
   enum Corner {
-    case topLeft // s1, s3
-    case topRight // s2, s4
-    case bottomRight // s6, s8
-    case bottomLeft // s5, s7
+    case topLeft // s0, s2
+    case topRight // s1, s3
+    case bottomRight // s5, s7
+    case bottomLeft // s4, s6
   }
 
   enum Alignment {
-    case horizontal // s1, s2, s7, s8
-    case vertical // s3, s4, s5, s6
+    case horizontal // s0, s1, s6, s7
+    case vertical // s2, s3, s4, s5
   }
 
   enum Direction {
@@ -62,7 +62,7 @@ internal extension FESquare {
     let alignment: Alignment
     let plane: ModelComponent
 
-    init(name: String, corner: Corner, alignment: Alignment) {
+    init(name: String, corner: Corner, alignment: Alignment, color: Material.Color) {
       self.corner = corner
       self.alignment = alignment
 
@@ -70,12 +70,12 @@ internal extension FESquare {
       case .vertical:
         plane = ModelComponent(
           mesh: .generatePlane(width: 1, depth: 1),
-          materials: [UnlitMaterial(color: FESquare.primaryColor)]
+          materials: [UnlitMaterial(color: color)]
         )
       case .horizontal:
         plane = ModelComponent(
           mesh: .generatePlane(width: 1, depth: 1),
-          materials: [UnlitMaterial(color: FESquare.primaryColor)]
+          materials: [UnlitMaterial(color: color)]
         )
       }
       super.init()
@@ -96,10 +96,6 @@ internal extension FESquare {
 //      material.lightingModel = .constant
 //      material.emission.contents = FocusSquare.primaryColor
       model = plane
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-      fatalError("\(#function) has not been implemented")
     }
 
     required init() {
