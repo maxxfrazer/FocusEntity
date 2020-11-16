@@ -14,17 +14,17 @@ import Combine
 public protocol HasFocusEntity: Entity {}
 
 public extension HasFocusEntity {
-  var focusEntity: FocusEntityComponent {
+  var focus: FocusEntityComponent {
     get { self.components[FocusEntityComponent.self] ?? .classic }
     set { self.components[FocusEntityComponent.self] = newValue }
   }
   var isOpen: Bool {
-    get { self.focusEntity.isOpen }
-    set { self.focusEntity.isOpen = newValue }
+    get { self.focus.isOpen }
+    set { self.focus.isOpen = newValue }
   }
   internal var segments: [FocusEntity.Segment] {
-    get { self.focusEntity.segments }
-    set { self.focusEntity.segments = newValue }
+    get { self.focus.segments }
+    set { self.focus.segments = newValue }
   }
 }
 
@@ -186,11 +186,12 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
   // MARK: - Initialization
 
   public convenience init(on arView: ARView, style: FocusEntityComponent.Style) {
-    self.init(on: arView, style: FocusEntityComponent(style: style))
+    self.init(on: arView, focus: FocusEntityComponent(style: style))
   }
-  public required init(on arView: ARView, style: FocusEntityComponent) {
+  public required init(on arView: ARView, focus: FocusEntityComponent) {
     self.arView = arView
     super.init()
+    self.focus = focus
     self.name = "FocusEntity"
     self.orientation = simd_quatf(angle: .pi / 2, axis: [1, 0, 0])
 
@@ -201,13 +202,14 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     self.delegate?.toInitializingState?()
     arView.scene.addAnchor(self)
     self.setAutoUpdate(to: true)
-    switch self.focusEntity.style {
+    switch self.focus.style {
     case .colored(_, _, _, let mesh):
       let fillPlane = ModelEntity(mesh: mesh)
       self.positioningEntity.addChild(fillPlane)
       self.fillPlane = fillPlane
+      self.coloredStateChanged()
     case .classic:
-      guard let classicStyle = self.focusEntity.classicStyle else {
+      guard let classicStyle = self.focus.classicStyle else {
         return
       }
       self.setupClassic(classicStyle)
@@ -260,7 +262,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
   ///
   /// - Parameter newPlane: If the entity is directly on a plane, is it a new plane to track
   public func stateChanged(newPlane: Bool = false) {
-    switch self.focusEntity.style {
+    switch self.focus.style {
     case .colored:
       self.coloredStateChanged()
     case .classic:
