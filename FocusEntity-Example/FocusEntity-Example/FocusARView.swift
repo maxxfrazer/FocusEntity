@@ -17,7 +17,8 @@ class FocusARView: ARView {
   required init(frame frameRect: CGRect) {
     super.init(frame: frameRect)
     self.setupConfig()
-    self.focusEntity = FocusEntity(on: self, style: .classic)
+    self.focusEntity = FocusEntity(on: self, focus: .classic)
+//    self.focusEntity = FocusEntity(on: self, style: .colored(onColor: .red, offColor: .blue, nonTrackingColor: .orange))
   }
 
   func setupConfig() {

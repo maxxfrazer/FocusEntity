@@ -13,14 +13,17 @@ import RealityKit
 public extension FocusEntity {
 
   internal func coloredStateChanged() {
-    guard let coloredStyle = self.focusEntity.coloredStyle else {
+    guard let coloredStyle = self.focus.coloredStyle else {
       return
     }
     var endColor: Material.Color = .clear
     if self.state == .initializing {
-      endColor = coloredStyle.otherColor
+      endColor = coloredStyle.nonTrackingColor
     } else {
       endColor = self.onPlane ? coloredStyle.onColor : coloredStyle.offColor
+    }
+    if self.fillPlane?.model?.materials.count == 0 {
+        self.fillPlane?.model?.materials = [SimpleMaterial()]
     }
     self.fillPlane?.model?.materials[0] = SimpleMaterial(
       color: endColor, isMetallic: false
