@@ -17,8 +17,18 @@ class FocusARView: ARView {
   required init(frame frameRect: CGRect) {
     super.init(frame: frameRect)
     self.setupConfig()
-    self.focusEntity = FocusEntity(on: self, focus: .classic)
-//    self.focusEntity = FocusEntity(on: self, style: .colored(onColor: .red, offColor: .blue, nonTrackingColor: .orange))
+    //self.focusEntity = FocusEntity(on: self, focus: .classic)
+    //self.focusEntity = FocusEntity(on: self, focus: .plane)
+    do{
+        let onColor : MaterialColorParameter = try .texture(.load(named: "Add"))
+        let offColor : MaterialColorParameter = try .texture(.load(named: "Open"))
+        self.focusEntity = FocusEntity(on: self, style: .colored(onColor: onColor, offColor: offColor, nonTrackingColor: offColor))
+    } catch {
+        self.focusEntity = FocusEntity(on: self, focus: .classic)
+        print("Unable to load plane textures")
+        print(error.localizedDescription)
+    }
+
   }
 
   func setupConfig() {
