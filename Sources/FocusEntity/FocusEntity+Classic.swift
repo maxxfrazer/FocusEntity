@@ -12,7 +12,6 @@ import RealityKit
 /// An extension of FocusEntity holding the methods for the "classic" style.
 internal extension FocusEntity {
 
-
   // MARK: - Configuration Properties
 
   /// Original size of the focus square in meters. Not currently customizable
@@ -40,7 +39,7 @@ internal extension FocusEntity {
 
   // MARK: - Initialization
 
-  func setupClassic(_ classicStyle: FocusEntityComponent.Style.Classic) {
+  func setupClassic(_ classicStyle: ClassicStyle) {
 //    opacity = 0.0
     /*
     The focus square consists of eight segments as follows, which can be individually animated.
@@ -58,7 +57,7 @@ internal extension FocusEntity {
       (.topLeft, .horizontal), (.topRight, .horizontal),
       (.topLeft, .vertical), (.topRight, .vertical),
       (.bottomLeft, .vertical), (.bottomRight, .vertical),
-      (.bottomLeft, .horizontal), (.bottomRight, .horizontal),
+      (.bottomLeft, .horizontal), (.bottomRight, .horizontal)
     ]
     self.segments = segCorners.enumerated().map { (index, cornerAlign) -> Segment in
       Segment(

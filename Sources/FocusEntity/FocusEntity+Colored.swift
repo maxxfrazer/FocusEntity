@@ -8,11 +8,10 @@
 
 #if canImport(ARKit)
 import RealityKit
-import UIKit
 
 /// An extension of FocusEntity holding the methods for the "colored" style.
 public extension FocusEntity {
-    
+
   internal func coloredStateChanged() {
     guard let coloredStyle = self.focus.coloredStyle else {
       return
@@ -30,7 +29,7 @@ public extension FocusEntity {
     var modelMaterial = UnlitMaterial(color: .clear)
     modelMaterial.baseColor = endColor
     //Necessary for transparency.
-    modelMaterial.tintColor = UIColor.white.withAlphaComponent(0.99)
+    modelMaterial.tintColor = Material.Color.white.withAlphaComponent(0.99)
     self.fillPlane?.model?.materials[0] = modelMaterial
   }
 }
