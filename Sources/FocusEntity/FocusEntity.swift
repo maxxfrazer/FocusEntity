@@ -28,7 +28,7 @@ public extension HasFocusEntity {
   }
 }
 
-@objc public protocol FocusEntityDelegate: AnyObject {
+@objc public protocol FocusEntityDelegate {
   /// Called when the FocusEntity is now in world space
   @objc optional func toTrackingState()
 
@@ -94,7 +94,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     }
     self.isAutoUpdating = autoUpdate
   }
-  public var delegate: FocusEntityDelegate?
+  public weak var delegate: FocusEntityDelegate?
 
   // MARK: - Types
   public enum State: Equatable {
@@ -219,7 +219,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
   required public init() {
     fatalError("init() has not been implemented")
   }
-  
+
   // MARK: - Appearance
 
   /// Hides the focus square.

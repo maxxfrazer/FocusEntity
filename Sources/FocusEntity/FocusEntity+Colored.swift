@@ -16,7 +16,7 @@ public extension FocusEntity {
     guard let coloredStyle = self.focus.coloredStyle else {
       return
     }
-    var endColor: Material.Color = .clear
+    var endColor: MaterialColorParameter
     if self.state == .initializing {
       endColor = coloredStyle.nonTrackingColor
     } else {
@@ -25,9 +25,12 @@ public extension FocusEntity {
     if self.fillPlane?.model?.materials.count == 0 {
         self.fillPlane?.model?.materials = [SimpleMaterial()]
     }
-    self.fillPlane?.model?.materials[0] = SimpleMaterial(
-      color: endColor, isMetallic: false
-    )
+    //Necessary for transparency.
+    var modelMaterial = UnlitMaterial(color: .clear)
+    modelMaterial.baseColor = endColor
+    //Necessary for transparency.
+    modelMaterial.tintColor = Material.Color.white.withAlphaComponent(0.99)
+    self.fillPlane?.model?.materials[0] = modelMaterial
   }
 }
 #endif
