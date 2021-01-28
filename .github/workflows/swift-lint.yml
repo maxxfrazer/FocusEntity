@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - "main"
-    tags:
-      - "!*"
   pull_request:
     branches:
     - "*"
@@ -14,14 +12,6 @@ jobs:
   build:
     runs-on: macOS-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: swiftlint
-      run: |
-        ./install_swiftlint.sh
-        swiftlint
-      #   swift package generate-xcodeproj
-      #   xcodebuild clean build -project $PROJECT -scheme $SCHEME -destination "$DESTINATION" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
-      # env:
-      #   PROJECT: FocusNode.xcodeproj
-      #   SCHEME: FocusNode-Package
-      #   DESTINATION: platform=iOS Simulator,name=iPhone Xs
+      - uses: actions/checkout@v1
+      - name: GitHub Action for SwiftLint
+        uses: norio-nomura/action-swiftlint@3.1.0
