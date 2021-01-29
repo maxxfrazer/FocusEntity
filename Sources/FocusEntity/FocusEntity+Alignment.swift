@@ -32,9 +32,11 @@ extension FocusEntity {
     
     self.updatePosition()
     
-    if self.scaleEntityBasedOnDistance {
-      self.scale = SIMD3<Float>(repeating: scaleBasedOnDistance(camera: camera))
-    }
+    //Produces odd scaling when focus entity is moving towards the user along a horizontal plane;
+    //looks like the focus entity is sinking downwards.
+//    if self.scaleEntityBasedOnDistance {
+//      self.scale = SIMD3<Float>(repeating: scaleBasedOnDistance(camera: camera))
+//    }
 
     // Correct y rotation of camera square.
     guard let camera = camera else { return }
