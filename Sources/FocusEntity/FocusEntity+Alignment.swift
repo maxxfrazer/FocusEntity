@@ -102,9 +102,13 @@ extension FocusEntity {
       return
     }
     
-    
-    let yRotation = simd_quatf(angle: angle, axis: [0,1,0])
-    let targetAlignment = raycastResult.worldTransform.orientation * yRotation
+    var targetAlignment = simd_quatf()
+    if alignment == .horizontal {
+        targetAlignment = simd_quatf(angle: angle, axis: [0,1,0])
+    } else {
+        targetAlignment = raycastResult.worldTransform.orientation
+    }
+
     // Change the focus entity's alignment
     if isChangingAlignment {
         //Uses interpolation.
@@ -165,9 +169,9 @@ extension FocusEntity {
       internal func performAlignmentAnimation(to newOrientation: simd_quatf) {
         //interpolate between current and target orientations
         orientation = simd_slerp(orientation, newOrientation, 0.15)
-        let forward : simd_float3 = [0,0,-1]
-        let point1 = orientation.act(forward)
-        let point2 = newOrientation.act(forward)
+        let testVector : simd_float3 = [0.7,0.7,0.7]
+        let point1 = orientation.act(testVector)
+        let point2 = newOrientation.act(testVector)
         let distanceBetweenVectors = simd_distance(point1, point2)
         //Stop interpolating when the rotations are close enough to each other.
         if distanceBetweenVectors < 0.03 {
