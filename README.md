@@ -46,8 +46,8 @@ See the [Example](./FocusEntity-Example) for a full working example as can be se
 - Optionally, you may select to use one of 3 visual styles: classic, color, and material.
 - If you choose material, you may use the preset textures or provide your own customized textures.
 - If you want to provide your own textures, add them to the Assets.xcassets catalog, then type the name of the asset in the appropriate place in this code:
-<br>```let onColor: MaterialColorParameter = try .texture(.load(named: "customAsset1"))```
-<br>```let offColor: MaterialColorParameter = try .texture(.load(named: "customAsset2"))```
+<br>```let onColor: MaterialColorParameter = try .texture(.load(named: "<#customAsset1#>"))```
+<br>```let offColor: MaterialColorParameter = try .texture(.load(named: "<#customAsset2#>"))```
 
 
 If something's not making sense in the Example, [send me a tweet](https://twitter.com/maxxfrazer) or Fork & open a Pull Request on this repository to make something more clear.

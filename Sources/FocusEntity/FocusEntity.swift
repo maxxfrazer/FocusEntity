@@ -152,7 +152,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
   public internal(set) var isAnimating = false
 
   /// Indicates if the square is currently changing its alignment.
-  internal var isChangingAlignment = false
+  public internal(set) var isChangingAlignment = false
 
   ///A camera anchor used for placing the focus entity in front of the camera.
   internal var cameraAnchor: AnchorEntity!

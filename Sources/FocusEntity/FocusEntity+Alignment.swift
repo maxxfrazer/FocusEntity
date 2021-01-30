@@ -102,7 +102,7 @@ extension FocusEntity {
       return
     }
     
-    var targetAlignment = simd_quatf()
+    var targetAlignment : simd_quatf
     if alignment == .horizontal {
         targetAlignment = simd_quatf(angle: angle, axis: [0,1,0])
     } else {
@@ -167,17 +167,16 @@ extension FocusEntity {
 
     ///Uses interpolation between orientations to create a smooth `easeOut` orientation adjustment animation.
       internal func performAlignmentAnimation(to newOrientation: simd_quatf) {
-        //interpolate between current and target orientations
+        //Interpolate between current and target orientations.
         orientation = simd_slerp(orientation, newOrientation, 0.15)
-        let testVector : simd_float3 = [0.7,0.7,0.7]
+        //This length creates a normalized vector (of length 1) with all 3 components being equal.
+        let axisLength = 1 / sqrtf(3)
+        let testVector: simd_float3 = [axisLength, axisLength, axisLength]
         let point1 = orientation.act(testVector)
         let point2 = newOrientation.act(testVector)
-        let distanceBetweenVectors = simd_distance(point1, point2)
+        let vectorsDot = simd_dot(point1, point2)
         //Stop interpolating when the rotations are close enough to each other.
-        if distanceBetweenVectors < 0.03 {
-            //Stop calling this function for horiztonal and vertical surfaces.
-            isChangingAlignment = false
-        }
+        self.isChangingAlignment = vectorsDot < 0.999
       }
 
   /**
