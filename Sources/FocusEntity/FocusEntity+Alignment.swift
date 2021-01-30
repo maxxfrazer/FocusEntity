@@ -14,20 +14,29 @@ import Combine
 extension FocusEntity {
 
   // MARK: Helper Methods
+    
+  /// Update the position of the focus square.
+  internal func updatePosition(){
+        // Average using several most recent positions.
+        recentFocusEntityPositions = Array(recentFocusEntityPositions.suffix(10))
+
+        // Move to average of recent positions to avoid jitter.
+        let average = recentFocusEntityPositions.reduce(
+          SIMD3<Float>(repeating: 0), { $0 + $1 }
+        ) / Float(recentFocusEntityPositions.count)
+        self.position = average
+    }
 
   /// Update the transform of the focus square to be aligned with the camera.
   internal func updateTransform(for position: SIMD3<Float>, raycastResult: ARRaycastResult, camera: ARCamera?) {
-    // Average using several most recent positions.
-    recentFocusEntityPositions = Array(recentFocusEntityPositions.suffix(10))
-
-    // Move to average of recent positions to avoid jitter.
-    let average = recentFocusEntityPositions.reduce(
-      SIMD3<Float>(repeating: 0), { $0 + $1 }
-    ) / Float(recentFocusEntityPositions.count)
-    self.position = average
-    if self.scaleEntityBasedOnDistance {
-      self.scale = SIMD3<Float>(repeating: scaleBasedOnDistance(camera: camera))
-    }
+    
+    self.updatePosition()
+    
+    //Produces odd scaling when focus entity is moving towards the user along a horizontal plane;
+    //looks like the focus entity is sinking downwards.
+//    if self.scaleEntityBasedOnDistance {
+//      self.scale = SIMD3<Float>(repeating: scaleBasedOnDistance(camera: camera))
+//    }
 
     // Correct y rotation of camera square.
     guard let camera = camera else { return }
@@ -56,14 +65,6 @@ extension FocusEntity {
   }
 
   internal func updateAlignment(for raycastResult: ARRaycastResult, yRotationAngle angle: Float) {
-    // Abort if an animation is currently in progress.
-    if isChangingAlignment {
-      return
-    }
-
-    var shouldAnimateAlignmentChange = false
-    let tempNode = SCNNode()
-    tempNode.simdRotation = SIMD4<Float>(0, 1, 0, angle)
 
     // Determine current alignment
     var alignment: ARPlaneAnchor.Alignment?
@@ -92,28 +93,32 @@ extension FocusEntity {
       alignment == .vertical && verticalHistory > alignCount / 2 ||
       raycastResult.anchor is ARPlaneAnchor {
       if alignment != self.currentAlignment {
-        shouldAnimateAlignmentChange = true
+        isChangingAlignment = true
         self.currentAlignment = alignment
         self.recentFocusEntityAlignments.removeAll()
       }
     } else {
       // Alignment is different than most of the history - ignore it
-      alignment = self.currentAlignment
       return
     }
-
-    if alignment == .vertical {
-      tempNode.simdOrientation = raycastResult.worldTransform.orientation
-      shouldAnimateAlignmentChange = true
+    
+    var targetAlignment : simd_quatf
+    if alignment == .horizontal {
+        targetAlignment = simd_quatf(angle: angle, axis: [0,1,0])
+    } else {
+        targetAlignment = raycastResult.worldTransform.orientation
     }
 
-    // Change the focus square's alignment
-    if shouldAnimateAlignmentChange {
-      performAlignmentAnimation(to: tempNode.simdOrientation)
+    // Change the focus entity's alignment
+    if isChangingAlignment {
+        //Uses interpolation.
+        //Needs to be called on every frame that the animation is desired, Not just the first frame.
+        performAlignmentAnimation(to: targetAlignment)
     } else {
-      orientation = tempNode.simdOrientation
+        orientation = targetAlignment
     }
   }
+    
 
   internal func normalize(_ angle: Float, forMinimalRotationTo ref: Float) -> Float {
     // Normalize angle in steps of 90 degrees such that the rotation to the other angle is minimal
@@ -160,9 +165,19 @@ extension FocusEntity {
     return results.first(where: { $0.target == .estimatedPlane })
   }
 
-  internal func performAlignmentAnimation(to newOrientation: simd_quatf) {
-    orientation = newOrientation
-  }
+    ///Uses interpolation between orientations to create a smooth `easeOut` orientation adjustment animation.
+      internal func performAlignmentAnimation(to newOrientation: simd_quatf) {
+        //Interpolate between current and target orientations.
+        orientation = simd_slerp(orientation, newOrientation, 0.15)
+        //This length creates a normalized vector (of length 1) with all 3 components being equal.
+        let axisLength = 1 / sqrtf(3)
+        let testVector: simd_float3 = [axisLength, axisLength, axisLength]
+        let point1 = orientation.act(testVector)
+        let point2 = newOrientation.act(testVector)
+        let vectorsDot = simd_dot(point1, point2)
+        //Stop interpolating when the rotations are close enough to each other.
+        self.isChangingAlignment = vectorsDot < 0.999
+      }
 
   /**
   Reduce visual size change with distance by scaling up when close and down when far away.

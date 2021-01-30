@@ -30,7 +30,8 @@ If you're unfamiliar with using RealityKit, I would also recommend reading my ar
 
 Add the URL of this repository to your Xcode 11+ Project.
 
-`https://github.com/maxxfrazer/FocusEntity.git`
+Go to File > Swift Packages > Add Package Dependency, and paste in this link:
+`https://github.com/maxxfrazer/FocusEntity`
 
 ---
 ## Usage
@@ -42,6 +43,11 @@ See the [Example](./FocusEntity-Example) for a full working example as can be se
 <br>```let focusSquare = FocusEntity(on: self.arView, style: .classic)```
 <br><br>(Optional)<br>
 - Set `focusSquare.delegate` to an object which conforms to `FocusEntityDelegate` if you wish to get callbacks for when the FocusEntity changes state.
+- Optionally, you may select to use one of 3 visual styles: classic, color, and material.
+- If you choose material, you may use the preset textures or provide your own customized textures.
+- If you want to provide your own textures, add them to the Assets.xcassets catalog, then type the name of the asset in the appropriate place in this code:
+<br>```let onColor: MaterialColorParameter = try .texture(.load(named: "<#customAsset1#>"))```
+<br>```let offColor: MaterialColorParameter = try .texture(.load(named: "<#customAsset2#>"))```
 
 
 If something's not making sense in the Example, [send me a tweet](https://twitter.com/maxxfrazer) or Fork & open a Pull Request on this repository to make something more clear.

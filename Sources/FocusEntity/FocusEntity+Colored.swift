@@ -29,7 +29,7 @@ public extension FocusEntity {
     var modelMaterial = UnlitMaterial(color: .clear)
     modelMaterial.baseColor = endColor
     //Necessary for transparency.
-    modelMaterial.tintColor = Material.Color.white.withAlphaComponent(0.99)
+    modelMaterial.tintColor = Material.Color.white.withAlphaComponent(0.995)
     self.fillPlane?.model?.materials[0] = modelMaterial
   }
 }
