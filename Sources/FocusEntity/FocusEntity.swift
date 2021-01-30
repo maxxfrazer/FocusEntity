@@ -154,7 +154,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
   /// Indicates if the square is currently changing its alignment.
   public internal(set) var isChangingAlignment = false
 
-  ///A camera anchor used for placing the focus entity in front of the camera.
+  /// A camera anchor used for placing the focus entity in front of the camera.
   internal var cameraAnchor: AnchorEntity!
 
   /// The focus square's current alignment.
@@ -247,7 +247,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
       let newPosition = cameraAnchor.convert(position: [0, 0, -1.1], to: nil)
       recentFocusEntityPositions.append(newPosition)
       updatePosition()
-      //--//
+      // --//
       // Make focus entity face the camera with a smooth animation.
       var newRotation = arView?.cameraTransform.rotation ?? simd_quatf()
       newRotation *= simd_quatf(angle: .pi / 2, axis: [1, 0, 0])
@@ -309,7 +309,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
       case .normal = camera.trackingState,
       let result = self.smartRaycast()
     else {
-    //We should place the focus entity in front of the camera instead of on a plane.
+      // We should place the focus entity in front of the camera instead of on a plane.
       putInFrontOfCamera()
       self.state = .initializing
       return

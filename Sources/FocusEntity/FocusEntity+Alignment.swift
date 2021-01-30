@@ -33,8 +33,8 @@ extension FocusEntity {
   ) {
     self.updatePosition()
 
-    //Produces odd scaling when focus entity is moving towards the user along a horizontal plane;
-    //looks like the focus entity is sinking downwards.
+    // Produces odd scaling when focus entity is moving towards the user along a horizontal plane;
+    // looks like the focus entity is sinking downwards.
 //    if self.scaleEntityBasedOnDistance {
 //      self.scale = SIMD3<Float>(repeating: scaleBasedOnDistance(camera: camera))
 //    }
@@ -165,7 +165,7 @@ extension FocusEntity {
     return results.first(where: { $0.target == .estimatedPlane })
   }
 
-    ///Uses interpolation between orientations to create a smooth `easeOut` orientation adjustment animation.
+    /// Uses interpolation between orientations to create a smooth `easeOut` orientation adjustment animation.
   internal func performAlignmentAnimation(to newOrientation: simd_quatf) {
     // Interpolate between current and target orientations.
     orientation = simd_slerp(orientation, newOrientation, 0.15)
