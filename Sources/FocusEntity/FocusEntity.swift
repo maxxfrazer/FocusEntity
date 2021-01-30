@@ -156,7 +156,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
 
   ///A camera anchor used for placing the focus entity in front of the camera.
   internal var cameraAnchor: AnchorEntity!
-    
+
   /// The focus square's current alignment.
   internal var currentAlignment: ARPlaneAnchor.Alignment?
 
@@ -201,7 +201,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
 
     cameraAnchor = AnchorEntity(.camera)
     arView.scene.addAnchor(cameraAnchor)
-    
+
     // Start the focus square as a billboard.
     displayAsBillboard()
     self.delegate?.toInitializingState?()
@@ -239,19 +239,19 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     self.currentAlignment = .none
     stateChangedSetup()
   }
-    
-    ///Places the focus entity in front of the camera instead of on a plane.
-    private func putInFrontOfCamera(){
-        
-        //Works better than arView.ray()
-        let newPosition = cameraAnchor.convert(position: [0,0,-1.1], to: nil)
-        recentFocusEntityPositions.append(newPosition)
-        updatePosition()
-        //--//
-        //Make focus entity face the camera with a smooth animation.
-        var newRotation = arView?.cameraTransform.rotation ?? simd_quatf()
-        newRotation *= simd_quatf(angle: .pi / 2, axis: [1,0,0])
-        performAlignmentAnimation(to: newRotation)
+
+    /// Places the focus entity in front of the camera instead of on a plane.
+    private func putInFrontOfCamera() {
+
+      // Works better than arView.ray()
+      let newPosition = cameraAnchor.convert(position: [0, 0, -1.1], to: nil)
+      recentFocusEntityPositions.append(newPosition)
+      updatePosition()
+      //--//
+      // Make focus entity face the camera with a smooth animation.
+      var newRotation = arView?.cameraTransform.rotation ?? simd_quatf()
+      newRotation *= simd_quatf(angle: .pi / 2, axis: [1, 0, 0])
+      performAlignmentAnimation(to: newRotation)
     }
 
   /// Called when a surface has been detected.
@@ -259,10 +259,10 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     self.stateChangedSetup()
     let position = raycastResult.worldTransform.translation
     if self.currentAlignment != .none {
-        //It is ready to move over to a new surface.
-        recentFocusEntityPositions.append(position)
+      // It is ready to move over to a new surface.
+      recentFocusEntityPositions.append(position)
     } else {
-        putInFrontOfCamera()
+      putInFrontOfCamera()
     }
     updateTransform(for: position, raycastResult: raycastResult, camera: camera)
   }
@@ -274,10 +274,10 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     anchorsOfVisitedPlanes.insert(planeAnchor)
     let position = raycastResult.worldTransform.translation
     if self.currentAlignment != .none {
-        //It is ready to move over to a new surface.
-        recentFocusEntityPositions.append(position)
+      // It is ready to move over to a new surface.
+      recentFocusEntityPositions.append(position)
     } else {
-        putInFrontOfCamera()
+      putInFrontOfCamera()
     }
     updateTransform(for: position, raycastResult: raycastResult, camera: camera)
   }
