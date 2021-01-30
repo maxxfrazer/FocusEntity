@@ -58,7 +58,7 @@ public struct FocusEntityComponent: Component {
     }
   }
 
-    ///Convenient presets
+  /// Convenient presets
   public static let classic = FocusEntityComponent(style: .classic(color: #colorLiteral(red: 1, green: 0.8, blue: 0, alpha: 1)))
   public static let plane = FocusEntityComponent(
     style: .colored(

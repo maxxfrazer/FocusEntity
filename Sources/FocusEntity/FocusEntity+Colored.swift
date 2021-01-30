@@ -25,10 +25,10 @@ public extension FocusEntity {
     if self.fillPlane?.model?.materials.count == 0 {
         self.fillPlane?.model?.materials = [SimpleMaterial()]
     }
-    //Necessary for transparency.
+    // Necessary for transparency.
     var modelMaterial = UnlitMaterial(color: .clear)
     modelMaterial.baseColor = endColor
-    //Necessary for transparency.
+    // Necessary for transparency.
     modelMaterial.tintColor = Material.Color.white.withAlphaComponent(0.995)
     self.fillPlane?.model?.materials[0] = modelMaterial
   }
