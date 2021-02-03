@@ -8,6 +8,7 @@
 
 #if canImport(ARKit)
 import RealityKit
+import ARKit
 
 internal struct ClassicStyle {
   var color: Material.Color
@@ -33,7 +34,6 @@ public struct FocusEntityComponent: Component {
       nonTrackingColor: MaterialColorParameter,
       mesh: MeshResource = MeshResource.generatePlane(width: 0.1, depth: 0.1)
     )
-
   }
 
   let style: Style
@@ -70,6 +70,7 @@ public struct FocusEntityComponent: Component {
   )
   internal var isOpen = true
   internal var segments: [FocusEntity.Segment] = []
+  public var allowedRaycast: ARRaycastQuery.Target = .estimatedPlane
 
   static var defaultPlane = MeshResource.generatePlane(
     width: 0.1, depth: 0.1
@@ -77,6 +78,12 @@ public struct FocusEntityComponent: Component {
 
   public init(style: Style) {
     self.style = style
+    // If the device has LiDAR, then default behaviour is to only allow
+    // existing detected planes
+    if #available(iOS 13.4, *),
+       ARWorldTrackingConfiguration.supportsSceneReconstruction(.mesh) {
+      self.allowedRaycast = .existingPlaneGeometry
+    }
   }
 }
 #endif
