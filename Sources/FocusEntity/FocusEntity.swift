@@ -244,7 +244,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     private func putInFrontOfCamera() {
 
       // Works better than arView.ray()
-      let newPosition = cameraAnchor.convert(position: [0, 0, -1.1], to: nil)
+      let newPosition = cameraAnchor.convert(position: [0, 0, -1], to: nil)
       recentFocusEntityPositions.append(newPosition)
       updatePosition()
       // --//
@@ -261,6 +261,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     if self.currentAlignment != .none {
       // It is ready to move over to a new surface.
       recentFocusEntityPositions.append(position)
+      performAlignmentAnimation(to: raycastResult.worldTransform.orientation)
     } else {
       putInFrontOfCamera()
     }
