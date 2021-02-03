@@ -150,7 +150,7 @@ extension FocusEntity {
     }
     let rcQuery = ARRaycastQuery(
       origin: camPos, direction: camDir,
-      allowing: .estimatedPlane, alignment: .any
+      allowing: self.allowedRaycast, alignment: .any
     )
     let results = self.arView?.session.raycast(rcQuery) ?? []
 

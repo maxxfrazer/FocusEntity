@@ -26,6 +26,10 @@ public extension HasFocusEntity {
     get { self.focus.segments }
     set { self.focus.segments = newValue }
   }
+  var allowedRaycast: ARRaycastQuery.Target {
+    get { self.focus.allowedRaycast }
+    set { self.focus.allowedRaycast = newValue }
+  }
 }
 
 @objc public protocol FocusEntityDelegate {
