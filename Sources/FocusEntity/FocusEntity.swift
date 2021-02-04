@@ -118,7 +118,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
 
   fileprivate func entityOffPlane(_ raycastResult: ARRaycastResult, _ camera: ARCamera?) {
     self.onPlane = false
-    displayOffPlane(for: raycastResult, camera: camera)
+    displayOffPlane(for: raycastResult)
   }
 
   public var state: State = .initializing {
@@ -137,7 +137,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
           self.anchoring = AnchoringComponent(.world(transform: Transform.identity.matrix))
         }
         if let planeAnchor = raycastResult.anchor as? ARPlaneAnchor {
-          entityOnPlane(for: raycastResult, planeAnchor: planeAnchor, camera: camera)
+          entityOnPlane(for: raycastResult, planeAnchor: planeAnchor)
           currentPlaneAnchor = planeAnchor
         } else {
           entityOffPlane(raycastResult, camera)
@@ -259,7 +259,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     }
 
   /// Called when a surface has been detected.
-  private func displayOffPlane(for raycastResult: ARRaycastResult, camera: ARCamera?) {
+  private func displayOffPlane(for raycastResult: ARRaycastResult) {
     self.stateChangedSetup()
     let position = raycastResult.worldTransform.translation
     if self.currentAlignment != .none {
@@ -269,11 +269,13 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     } else {
       putInFrontOfCamera()
     }
-    updateTransform(for: position, raycastResult: raycastResult, camera: camera)
+    updateTransform(raycastResult: raycastResult)
   }
 
   /// Called when a plane has been detected.
-  private func entityOnPlane(for raycastResult: ARRaycastResult, planeAnchor: ARPlaneAnchor, camera: ARCamera?) {
+  private func entityOnPlane(
+    for raycastResult: ARRaycastResult, planeAnchor: ARPlaneAnchor
+  ) {
     self.onPlane = true
     self.stateChangedSetup(newPlane: !anchorsOfVisitedPlanes.contains(planeAnchor))
     anchorsOfVisitedPlanes.insert(planeAnchor)
@@ -284,7 +286,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     } else {
       putInFrontOfCamera()
     }
-    updateTransform(for: position, raycastResult: raycastResult, camera: camera)
+    updateTransform(raycastResult: raycastResult)
   }
 
   /// Called whenever the state of the focus entity changes
