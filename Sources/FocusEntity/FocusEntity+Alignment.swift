@@ -28,49 +28,26 @@ extension FocusEntity {
   }
 
   /// Update the transform of the focus square to be aligned with the camera.
-  internal func updateTransform(
-    for position: SIMD3<Float>, raycastResult: ARRaycastResult, camera: ARCamera?
-  ) {
+  internal func updateTransform(raycastResult: ARRaycastResult) {
     self.updatePosition()
 
-    // Produces odd scaling when focus entity is moving towards the user along a horizontal plane;
-    // looks like the focus entity is sinking downwards.
-//    if self.scaleEntityBasedOnDistance {
-//      self.scale = SIMD3<Float>(repeating: scaleBasedOnDistance(camera: camera))
-//    }
-
-    // Correct y rotation of camera square.
-    guard let camera = camera else { return }
-    let tilt = abs(camera.eulerAngles.x)
-    let threshold1: Float = .pi / 2 * 0.65
-    let threshold2: Float = .pi / 2 * 0.75
-    let yaw = atan2f(camera.transform.columns.0.x, camera.transform.columns.1.x)
-    var angle: Float = 0
-
-    switch tilt {
-    case 0..<threshold1:
-      angle = camera.eulerAngles.y
-
-    case threshold1..<threshold2:
-      let relativeInRange = abs((tilt - threshold1) / (threshold2 - threshold1))
-      let normalizedY = normalize(camera.eulerAngles.y, forMinimalRotationTo: yaw)
-      angle = normalizedY * (1 - relativeInRange) + yaw * relativeInRange
-
-    default:
-      angle = yaw
-    }
-
     if state != .initializing {
-      updateAlignment(for: raycastResult, yRotationAngle: angle)
+      updateAlignment(for: raycastResult)
     }
   }
 
-  internal func updateAlignment(for raycastResult: ARRaycastResult, yRotationAngle angle: Float) {
+  internal func updateAlignment(for raycastResult: ARRaycastResult) {
+
+    var targetAlignment = raycastResult.worldTransform.orientation
 
     // Determine current alignment
     var alignment: ARPlaneAnchor.Alignment?
     if let planeAnchor = raycastResult.anchor as? ARPlaneAnchor {
       alignment = planeAnchor.alignment
+      // Catching case when looking at ceiling
+      if targetAlignment.act([0, 1, 0]).y < -0.9 {
+        targetAlignment *= simd_quatf(angle: .pi, axis: [0, 1, 0])
+      }
     } else if raycastResult.targetAlignment == .horizontal {
       alignment = .horizontal
     } else if raycastResult.targetAlignment == .vertical {
@@ -93,21 +70,15 @@ extension FocusEntity {
     if alignment == .horizontal && horizontalHistory > alignCount * 3/4 ||
       alignment == .vertical && verticalHistory > alignCount / 2 ||
       raycastResult.anchor is ARPlaneAnchor {
-      if alignment != self.currentAlignment {
+        if alignment != self.currentAlignment ||
+          (alignment == .vertical && self.shouldContinueAlignAnim(to: targetAlignment)
+        ) {
         isChangingAlignment = true
         self.currentAlignment = alignment
-        self.recentFocusEntityAlignments.removeAll()
       }
     } else {
       // Alignment is different than most of the history - ignore it
       return
-    }
-
-    var targetAlignment: simd_quatf
-    if alignment == .horizontal {
-      targetAlignment = simd_quatf(angle: angle, axis: [0, 1, 0])
-    } else {
-      targetAlignment = raycastResult.worldTransform.orientation
     }
 
     // Change the focus entity's alignment
@@ -170,12 +141,16 @@ extension FocusEntity {
     // Interpolate between current and target orientations.
     orientation = simd_slerp(orientation, newOrientation, 0.15)
     // This length creates a normalized vector (of length 1) with all 3 components being equal.
+    self.isChangingAlignment = self.shouldContinueAlignAnim(to: newOrientation)
+  }
+
+  func shouldContinueAlignAnim(to newOrientation: simd_quatf) -> Bool {
     let testVector = simd_float3(repeating: 1 / sqrtf(3))
     let point1 = orientation.act(testVector)
     let point2 = newOrientation.act(testVector)
     let vectorsDot = simd_dot(point1, point2)
     // Stop interpolating when the rotations are close enough to each other.
-    self.isChangingAlignment = vectorsDot < 0.999
+    return vectorsDot < 0.999
   }
 
   /**
