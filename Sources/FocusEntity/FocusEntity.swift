@@ -53,7 +53,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     self.arView?.scene
   }
 
-  internal var arView: ARView?
+  internal weak var arView: ARView?
 
   /// For moving the FocusEntity to a whole new ARView
   /// - Parameter view: The destination `ARView`
@@ -86,15 +86,15 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     if autoUpdate == self.isAutoUpdating {
       return
     }
-    if self.arView == nil {
-      return
-    }
-    if autoUpdate {
+    if !autoUpdate {
+      self.updateCancellable?.cancel()
+    } else {
+      if self.arView == nil {
+        return
+      }
       self.updateCancellable = self.myScene?.subscribe(
         to: SceneEvents.Update.self, self.updateFocusEntity
       )
-    } else {
-      self.updateCancellable?.cancel()
     }
     self.isAutoUpdating = autoUpdate
   }
