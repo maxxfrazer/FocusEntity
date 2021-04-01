@@ -83,15 +83,12 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
   public private(set) var isAutoUpdating: Bool = false
 
   public func setAutoUpdate(to autoUpdate: Bool) {
-    if autoUpdate == self.isAutoUpdating {
+    guard autoUpdate == self.isAutoUpdating,
+          (autoUpdate && self.arView == nil) else {
       return
     }
-    if !autoUpdate {
-      self.updateCancellable?.cancel()
-    } else {
-      if self.arView == nil {
-        return
-      }
+    self.updateCancellable?.cancel()
+    if autoUpdate {
       self.updateCancellable = self.myScene?.subscribe(
         to: SceneEvents.Update.self, self.updateFocusEntity
       )
