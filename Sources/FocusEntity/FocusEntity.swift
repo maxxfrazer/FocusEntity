@@ -83,8 +83,8 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
   public private(set) var isAutoUpdating: Bool = false
 
   public func setAutoUpdate(to autoUpdate: Bool) {
-    guard autoUpdate == self.isAutoUpdating,
-          (autoUpdate && self.arView == nil) else {
+    guard autoUpdate != self.isAutoUpdating,
+          !(autoUpdate && self.arView == nil) else {
       return
     }
     self.updateCancellable?.cancel()
