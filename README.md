@@ -40,7 +40,9 @@ See the [Example](./FocusEntity-Example) for a full working example as can be se
 
 - After installing, import `FocusEntity` to your .swift file
 - Create an instance of FocusEntity:
-<br>```let focusSquare = FocusEntity(on: self.arView, style: .classic)```
+<br>```let focusSquare = FocusEntity(on: self.arView, focus: .classic)```
+<br>or
+<br>```let focusSquare = FocusEntity(on: self.arView, style: .classic(color: .yellow))```
 <br><br>(Optional)<br>
 - Set `focusSquare.delegate` to an object which conforms to `FocusEntityDelegate` if you wish to get callbacks for when the FocusEntity changes state.
 - Optionally, you may select to use one of 3 visual styles: classic, color, and material.
