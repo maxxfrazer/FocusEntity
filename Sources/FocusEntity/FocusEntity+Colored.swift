@@ -27,9 +27,23 @@ public extension FocusEntity {
     }
     // Necessary for transparency.
     var modelMaterial = UnlitMaterial(color: .clear)
-    modelMaterial.baseColor = endColor
-    // Necessary for transparency.
-    modelMaterial.tintColor = Material.Color.white.withAlphaComponent(0.995)
+    if #available(iOS 15.0, *) {
+      switch endColor {
+      case .color(let color):
+        modelMaterial.color = .init(tint: color, texture: nil)
+      case .texture(let tex):
+        modelMaterial.color = .init(tint: .white, texture: .init(tex))
+      @unknown default:
+        #if DEBUG
+          print("FOCUSENTITY: Could not work with color parameter")
+        #endif
+      }
+      modelMaterial.blending = .transparent(opacity: 1.0)
+    } else {
+      // Necessary for transparency.
+      modelMaterial.baseColor = endColor
+      modelMaterial.tintColor = Material.Color.white.withAlphaComponent(0.995)
+    }
     self.fillPlane?.model?.materials[0] = modelMaterial
   }
 }

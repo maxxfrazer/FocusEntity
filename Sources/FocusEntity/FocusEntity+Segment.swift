@@ -90,12 +90,6 @@ internal extension FocusEntity {
 //      self.orientation = .init(angle: .pi / 2, axis: [1, 0, 0])
       self.name = name
 
-//      let material = plane.firstMaterial!
-//      material.diffuse.contents = FocusSquare.primaryColor
-//      material.isDoubleSided = true
-//      material.ambient.contents = UIColor.black
-//      material.lightingModel = .constant
-//      material.emission.contents = FocusSquare.primaryColor
       model = plane
     }
 

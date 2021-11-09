@@ -26,14 +26,21 @@ internal struct ColoredStyle {
 }
 
 public struct FocusEntityComponent: Component {
+  /// Style of the FocusEntity
   public enum Style {
+    /// Default style, showing an opening and closing box corner design
     case classic(color: Material.Color)
+    /// A mesh with an on/off colour applied
     case colored(
       onColor: MaterialColorParameter,
       offColor: MaterialColorParameter,
       nonTrackingColor: MaterialColorParameter,
       mesh: MeshResource = MeshResource.generatePlane(width: 0.1, depth: 0.1)
     )
+    /// No visible entity shown
+    case hidden
+    /// A custom entity to be added in place of anything else
+    case custom(model: HasModel)
   }
 
   let style: Style

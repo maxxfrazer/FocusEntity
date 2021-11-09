@@ -32,12 +32,31 @@ public extension HasFocusEntity {
   }
 }
 
-@objc public protocol FocusEntityDelegate {
-  /// Called when the FocusEntity is now in world space
-  @objc optional func toTrackingState()
+public protocol FocusEntityDelegate: AnyObject {
+  /// Called when the FocusEntity state changes.
+  func focusEntity(
+      _ entity: FocusEntity, trackingStateDidChange state: FocusEntity.State
+  )
 
-  /// Called when the FocusEntity is tracking the camera
-  @objc optional func toInitializingState()
+  @available(*, deprecated, message: "use focusEntity(entity:,trackingStateDidChange:) instead")
+  func toTrackingState()
+
+  @available(*, deprecated, message: "use focusEntity(entity:,trackingStateDidChange:) instead")
+  func toInitializingState()
+}
+
+public extension FocusEntityDelegate {
+  func focusEntity(_ entity: FocusEntity, trackingStateDidChange state: FocusEntity.State) {}
+  func toTrackingState() {
+    #if DEBUG
+      print("Deprecated, please use other delegate method")
+    #endif
+  }
+  func toInitializingState() {
+    #if DEBUG
+      print("Deprecated, please use other delegate method")
+    #endif
+  }
 }
 
 /**
@@ -45,10 +64,15 @@ An `Entity` which is used to provide uses with visual cues about the status of A
 */
 open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
 
+  /// Name property to use when wanting to find the FocusEntity in your scene
+  public static let entityNaming: String = "__FocusEntity"
+
   public enum FEError: Error {
     case noScene
   }
 
+  /// Find the scene that this FocusEntity should be in.
+  /// Used instead of `self.scene` because the entity may not be anchored.
   private var myScene: Scene? {
     self.arView?.scene
   }
@@ -126,7 +150,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
       case .initializing:
         if oldValue != .initializing {
           displayAsBillboard()
-          self.delegate?.toInitializingState?()
+          self.delegate?.focusEntity(self, trackingStateDidChange: self.state)
         }
       case let .tracking(raycastResult, camera):
         let stateChanged = oldValue == .initializing
@@ -141,7 +165,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
           currentPlaneAnchor = nil
         }
         if stateChanged {
-          self.delegate?.toTrackingState?()
+          self.delegate?.focusEntity(self, trackingStateDidChange: self.state)
         }
       }
     }
@@ -174,7 +198,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
   internal var anchorsOfVisitedPlanes: Set<ARAnchor> = []
 
   /// The primary node that controls the position of other `FocusEntity` nodes.
-  internal let positioningEntity = Entity()
+  public let positioningEntity = Entity()
 
   internal var fillPlane: ModelEntity?
 
@@ -191,11 +215,12 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
   public convenience init(on arView: ARView, style: FocusEntityComponent.Style) {
     self.init(on: arView, focus: FocusEntityComponent(style: style))
   }
+
   public required init(on arView: ARView, focus: FocusEntityComponent) {
     self.arView = arView
     super.init()
     self.focus = focus
-    self.name = "FocusEntity"
+    self.name = FocusEntity.entityNaming
     self.orientation = simd_quatf(angle: .pi / 2, axis: [1, 0, 0])
 
     self.addChild(self.positioningEntity)
@@ -205,7 +230,6 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
 
     // Start the focus square as a billboard.
     displayAsBillboard()
-    self.delegate?.toInitializingState?()
     arView.scene.addAnchor(self)
     self.setAutoUpdate(to: true)
     switch self.focus.style {
@@ -219,6 +243,9 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
         return
       }
       self.setupClassic(classicStyle)
+    case .custom(let model):
+      self.positioningEntity.addChild(model)
+    case .hidden: break
     }
   }
 
@@ -299,6 +326,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
       } else {
         self.offPlaneAniation()
       }
+    case .hidden, .custom: break
     }
   }
 
@@ -310,8 +338,8 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
   public func updateFocusEntity(event: SceneEvents.Update? = nil) {
     // Perform hit testing only when ARKit tracking is in a good state.
     guard let camera = self.arView?.session.currentFrame?.camera,
-      case .normal = camera.trackingState,
-      let result = self.smartRaycast()
+          case .normal = camera.trackingState,
+          let result = self.smartRaycast()
     else {
       // We should place the focus entity in front of the camera instead of on a plane.
       putInFrontOfCamera()

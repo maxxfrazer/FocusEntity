@@ -7,7 +7,7 @@
 //
 
 import RealityKit
-// import FocusEntity
+import FocusEntity
 import Combine
 import ARKit
 
@@ -30,8 +30,23 @@ class FocusARView: ARView {
       self.focusEntity = FocusEntity(on: self, focus: .plane)
     case .material:
       do {
-        let onColor: MaterialColorParameter = try .texture(.load(named: "Add"))
-        let offColor: MaterialColorParameter = try .texture(.load(named: "Open"))
+        var onColor: MaterialColorParameter
+        var offColor: MaterialColorParameter
+
+        if #available(iOS 15.0, *),
+           let circleImg = UIImage(systemName: "circle")?.cgImage,
+           let plusImg = UIImage(systemName: "plus.circle")?.cgImage,
+           let imgCircle = try? TextureResource.generate(
+            from: circleImg, withName: "circle", options: .init(semantic: .raw)),
+           let imgPlus = try? TextureResource.generate(
+            from: plusImg, withName: "plus.circle", options: .init(semantic: .raw)
+           ) {
+          onColor = .texture(imgPlus)
+          offColor = .texture(imgCircle)
+        } else {
+          onColor = try .texture(.load(named: "Add"))
+          offColor = try .texture(.load(named: "Open"))
+        }
         self.focusEntity = FocusEntity(
           on: self,
           style: .colored(
@@ -57,14 +72,5 @@ class FocusARView: ARView {
 
   @objc required dynamic init?(coder decoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
-  }
-}
-
-extension FocusARView: FocusEntityDelegate {
-  func toTrackingState() {
-    print("tracking")
-  }
-  func toInitializingState() {
-    print("initializing")
   }
 }
