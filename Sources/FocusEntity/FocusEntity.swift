@@ -8,6 +8,9 @@
 
 #if canImport(ARKit)
 import RealityKit
+#if canImport(RealityFoundation)
+import RealityFoundation
+#endif
 import ARKit
 import Combine
 
