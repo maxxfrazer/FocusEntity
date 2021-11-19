@@ -6,7 +6,7 @@
 //  Copyright © 2019 Max Cobb. All rights reserved.
 //
 
-#if canImport(ARKit)
+#if canImport(ARKit) && !targetEnvironment(simulator)
 import RealityKit
 
 /// An extension of FocusEntity holding the methods for the "classic" style.
