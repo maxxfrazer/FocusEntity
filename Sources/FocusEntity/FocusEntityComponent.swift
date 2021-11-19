@@ -6,7 +6,6 @@
 //  Copyright © 2019 Max Cobb. All rights reserved.
 //
 
-#if canImport(ARKit) && !targetEnvironment(simulator)
 import RealityKit
 import ARKit
 
@@ -86,4 +85,3 @@ public struct FocusEntityComponent: Component {
     }
   }
 }
-#endif

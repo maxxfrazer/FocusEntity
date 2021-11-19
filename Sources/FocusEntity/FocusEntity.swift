@@ -6,11 +6,12 @@
 //  Copyright © 2019 Max Cobb. All rights reserved.
 //
 
-#if canImport(ARKit) && !targetEnvironment(simulator)
 import RealityKit
 #if canImport(RealityFoundation)
 import RealityFoundation
 #endif
+
+#if canImport(ARKit) && !targetEnvironment(simulator)
 import ARKit
 import Combine
 
@@ -330,9 +331,14 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
 FocusEntity is only enabled for environments which can import ARKit.
 */
 open class FocusEntity {
-  init?() {
-    print("This is not supported when ARKit cannot be imported.")
-    return nil
+  public convenience init(on arView: ARView, style: FocusEntityComponent.Style) {
+    self.init(on: arView, focus: FocusEntityComponent(style: style))
+  }
+  public convenience init(on arView: ARView, focus: FocusEntityComponent) {
+    self.init()
+  }
+  internal init() {
+    print("This is not supported when ARKit cannot be imported or using the simulator.")
   }
 }
 #endif
