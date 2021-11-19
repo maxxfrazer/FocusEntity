@@ -6,7 +6,7 @@
 //  Copyright © 2019 Max Cobb. All rights reserved.
 //
 
-#if canImport(ARKit)
+#if canImport(ARKit) && !targetEnvironment(simulator)
 import RealityKit
 import ARKit
 import Combine
