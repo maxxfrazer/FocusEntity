@@ -7,7 +7,7 @@
 //
 
 import RealityKit
-// import FocusEntity
+import FocusEntity
 import Combine
 import ARKit
 
