@@ -17,10 +17,9 @@ jobs:
     - uses: actions/checkout@v1
     - name: Build Package
       run: |
-        swift package generate-xcodeproj
-        xcodebuild clean build -project $PROJECT -scheme $SCHEME -sdk $SDK CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
+        sudo xcode-select --switch $DEVELOPER_DIR
+        xcodebuild -scheme $SCHEME -destination $DESTINATION | xcpretty
       env:
-        DEVELOPER_DIR: /Applications/Xcode_12.app/Contents/Developer
-        PROJECT: FocusEntity.xcodeproj
-        SCHEME: FocusEntity-Package
-        SDK: iphoneos
+        DEVELOPER_DIR: /Applications/Xcode_13.0.app/Contents/Developer
+        SCHEME: FocusEntity
+        DESTINATION: generic/platform=iOS
