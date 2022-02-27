@@ -11,6 +11,10 @@ import RealityKit
 import RealityFoundation
 #endif
 
+#if os(macOS) || targetEnvironment(simulator)
+#warning("FocusEntity: This package is only fully available with physical iOS devices")
+#endif
+
 #if canImport(ARKit) && !targetEnvironment(simulator)
 import ARKit
 import Combine
@@ -338,7 +342,7 @@ open class FocusEntity {
         self.init()
     }
     internal init() {
-        print("This is not supported when ARKit cannot be imported or using the simulator.")
+        print("This is only supported on a physical iOS device.")
     }
 }
 #endif
