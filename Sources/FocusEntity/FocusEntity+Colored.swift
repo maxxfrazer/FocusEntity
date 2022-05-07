@@ -6,7 +6,6 @@
 //  Copyright © 2019 Max Cobb. All rights reserved.
 //
 
-#if canImport(ARKit) && !targetEnvironment(simulator)
 import RealityKit
 
 /// An extension of FocusEntity holding the methods for the "colored" style.
@@ -26,7 +25,7 @@ public extension FocusEntity {
             self.fillPlane?.model?.materials = [SimpleMaterial()]
         }
         var modelMaterial = UnlitMaterial(color: .clear)
-        if #available(iOS 15, *) {
+        if #available(iOS 15, macOS 12, *) {
             switch endColor {
             case .color(let uikitColour):
                 modelMaterial.color = .init(tint: uikitColour, texture: nil)
@@ -42,4 +41,3 @@ public extension FocusEntity {
         self.fillPlane?.model?.materials[0] = modelMaterial
     }
 }
-#endif

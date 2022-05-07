@@ -6,6 +6,7 @@
 //  Copyright © 2019 Max Cobb. All rights reserved.
 //
 
+import Foundation
 import RealityKit
 #if canImport(RealityFoundation)
 import RealityFoundation
@@ -15,8 +16,9 @@ import RealityFoundation
 #warning("FocusEntity: This package is only fully available with physical iOS devices")
 #endif
 
-#if canImport(ARKit) && !targetEnvironment(simulator)
+#if canImport(ARKit)
 import ARKit
+#endif
 import Combine
 
 public protocol HasFocusEntity: Entity {}
@@ -34,10 +36,12 @@ public extension HasFocusEntity {
         get { self.focus.segments }
         set { self.focus.segments = newValue }
     }
+    #if canImport(ARKit)
     var allowedRaycast: ARRaycastQuery.Target {
         get { self.focus.allowedRaycast }
         set { self.focus.allowedRaycast = newValue }
     }
+    #endif
 }
 
 @objc public protocol FocusEntityDelegate {
@@ -92,14 +96,15 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
 
     public func setAutoUpdate(to autoUpdate: Bool) {
         guard autoUpdate != self.isAutoUpdating,
-              !(autoUpdate && self.arView == nil) else {
-                  return
-              }
+              !(autoUpdate && self.arView == nil)
+        else { return }
         self.updateCancellable?.cancel()
         if autoUpdate {
+            #if canImport(ARKit)
             self.updateCancellable = self.myScene?.subscribe(
                 to: SceneEvents.Update.self, self.updateFocusEntity
             )
+            #endif
         }
         self.isAutoUpdating = autoUpdate
     }
@@ -108,7 +113,9 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     // MARK: - Types
     public enum State: Equatable {
         case initializing
+        #if canImport(ARKit)
         case tracking(raycastResult: ARRaycastResult, camera: ARCamera?)
+        #endif
     }
 
     // MARK: - Properties
@@ -117,14 +124,18 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     var lastPosition: SIMD3<Float>? {
         switch state {
         case .initializing: return nil
+        #if canImport(ARKit)
         case .tracking(let raycastResult, _): return raycastResult.worldTransform.translation
+        #endif
         }
     }
 
+    #if canImport(ARKit)
     fileprivate func entityOffPlane(_ raycastResult: ARRaycastResult, _ camera: ARCamera?) {
         self.onPlane = false
         displayOffPlane(for: raycastResult)
     }
+    #endif
 
     public var state: State = .initializing {
         didSet {
@@ -136,6 +147,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
                     displayAsBillboard()
                     self.delegate?.toInitializingState?()
                 }
+            #if canImport(ARKit)
             case let .tracking(raycastResult, camera):
                 let stateChanged = oldValue == .initializing
                 if stateChanged && self.anchor != nil {
@@ -151,6 +163,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
                 if stateChanged {
                     self.delegate?.toTrackingState?()
                 }
+            #endif
             }
         }
     }
@@ -166,20 +179,22 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     /// A camera anchor used for placing the focus entity in front of the camera.
     internal var cameraAnchor: AnchorEntity!
 
+    #if canImport(ARKit)
     /// The focus square's current alignment.
     internal var currentAlignment: ARPlaneAnchor.Alignment?
 
     /// The current plane anchor if the focus square is on a plane.
     public internal(set) var currentPlaneAnchor: ARPlaneAnchor?
 
-    /// The focus square's most recent positions.
-    internal var recentFocusEntityPositions: [SIMD3<Float>] = []
-
     /// The focus square's most recent alignments.
     internal var recentFocusEntityAlignments: [ARPlaneAnchor.Alignment] = []
 
     /// Previously visited plane anchors.
     internal var anchorsOfVisitedPlanes: Set<ARAnchor> = []
+    #endif
+
+    /// The focus square's most recent positions.
+    internal var recentFocusEntityPositions: [SIMD3<Float>] = []
 
     /// The primary node that controls the position of other `FocusEntity` nodes.
     internal let positioningEntity = Entity()
@@ -245,7 +260,9 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     /// Displays the focus square parallel to the camera plane.
     private func displayAsBillboard() {
         self.onPlane = false
+        #if canImport(ARKit)
         self.currentAlignment = .none
+        #endif
         stateChangedSetup()
     }
 
@@ -263,6 +280,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
         performAlignmentAnimation(to: newRotation)
     }
 
+    #if canImport(ARKit)
     /// Called when a surface has been detected.
     private func displayOffPlane(for raycastResult: ARRaycastResult) {
         self.stateChangedSetup()
@@ -293,6 +311,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
         }
         updateTransform(raycastResult: raycastResult)
     }
+    #endif
 
     /// Called whenever the state of the focus entity changes
     ///
@@ -315,6 +334,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
         self.stateChanged(newPlane: newPlane)
     }
 
+    #if canImport(ARKit)
     public func updateFocusEntity(event: SceneEvents.Update? = nil) {
         // Perform hit testing only when ARKit tracking is in a good state.
         guard let camera = self.arView?.session.currentFrame?.camera,
@@ -329,20 +349,5 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
 
         self.state = .tracking(raycastResult: result, camera: camera)
     }
+    #endif
 }
-#else
-/**
- FocusEntity is only enabled for environments which can import ARKit.
- */
-open class FocusEntity {
-    public convenience init(on arView: ARView, style: FocusEntityComponent.Style) {
-        self.init(on: arView, focus: FocusEntityComponent(style: style))
-    }
-    public convenience init(on arView: ARView, focus: FocusEntityComponent) {
-        self.init()
-    }
-    internal init() {
-        print("This is only supported on a physical iOS device.")
-    }
-}
-#endif
