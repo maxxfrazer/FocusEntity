@@ -44,12 +44,26 @@ public extension HasFocusEntity {
     #endif
 }
 
-@objc public protocol FocusEntityDelegate {
+public protocol FocusEntityDelegate: AnyObject {
     /// Called when the FocusEntity is now in world space
-    @objc optional func toTrackingState()
+    func toTrackingState()
 
     /// Called when the FocusEntity is tracking the camera
-    @objc optional func toInitializingState()
+    func toInitializingState()
+
+    func focusEntity(
+        _ focusEntity: FocusEntity,
+        trackingUpdated trackingState: FocusEntity.State,
+        oldState: FocusEntity.State
+    )
+}
+
+public extension FocusEntityDelegate {
+    func toTrackingState() {}
+    func toInitializingState() {}
+    func focusEntity(
+        _ focusEntity: FocusEntity, trackingUpdated trackingState: FocusEntity.State, oldState: FocusEntity.State
+    ) {}
 }
 
 /**
@@ -145,7 +159,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
             case .initializing:
                 if oldValue != .initializing {
                     displayAsBillboard()
-                    self.delegate?.toInitializingState?()
+                    self.delegate?.toInitializingState()
                 }
             #if canImport(ARKit)
             case let .tracking(raycastResult, camera):
@@ -160,8 +174,9 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
                     entityOffPlane(raycastResult, camera)
                     currentPlaneAnchor = nil
                 }
+                self.delegate?.focusEntity(self, trackingUpdated: state, oldState: oldValue)
                 if stateChanged {
-                    self.delegate?.toTrackingState?()
+                    self.delegate?.toTrackingState()
                 }
             #endif
             }
@@ -228,7 +243,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
 
         // Start the focus square as a billboard.
         displayAsBillboard()
-        self.delegate?.toInitializingState?()
+        self.delegate?.toInitializingState()
         arView.scene.addAnchor(self)
         self.setAutoUpdate(to: true)
         switch self.focus.style {

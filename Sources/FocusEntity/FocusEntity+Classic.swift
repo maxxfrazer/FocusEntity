@@ -109,4 +109,3 @@ internal extension FocusEntity {
     }
 
 }
-
