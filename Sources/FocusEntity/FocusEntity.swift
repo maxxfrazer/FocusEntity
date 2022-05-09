@@ -51,10 +51,26 @@ public protocol FocusEntityDelegate: AnyObject {
     /// Called when the FocusEntity is tracking the camera
     func toInitializingState()
 
+    /// When the tracking state of the FocusEntity updates. This will be called every update frame.
+    /// - Parameters:
+    ///   - focusEntity: FocusEntity object whose tracking state has changed.
+    ///   - trackingState: New tracking state of the focus entity.
+    ///   - oldState: Old tracking state of the focus entity.
     func focusEntity(
         _ focusEntity: FocusEntity,
         trackingUpdated trackingState: FocusEntity.State,
         oldState: FocusEntity.State
+    )
+
+    /// When the plane this focus entity is tracking changes. If the focus entity moves around within one plane anchor there will be no calls.
+    /// - Parameters:
+    ///   - focusEntity: FocusEntity object whose anchor has changed.
+    ///   - planeChanged: New anchor the focus entity is tracked to.
+    ///   - oldPlane: Previous anchor the focus entity is tracked to.
+    func focusEntity(
+        _ focusEntity: FocusEntity,
+        planeChanged: ARPlaneAnchor?,
+        oldPlane: ARPlaneAnchor?
     )
 }
 
@@ -64,6 +80,7 @@ public extension FocusEntityDelegate {
     func focusEntity(
         _ focusEntity: FocusEntity, trackingUpdated trackingState: FocusEntity.State, oldState: FocusEntity.State
     ) {}
+    func focusEntity(_ focusEntity: FocusEntity, planeChanged: ARPlaneAnchor?, oldPlane: ARPlaneAnchor?) {}
 }
 
 /**
@@ -167,19 +184,19 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
                 if stateChanged && self.anchor != nil {
                     self.anchoring = AnchoringComponent(.world(transform: Transform.identity.matrix))
                 }
-                if let planeAnchor = raycastResult.anchor as? ARPlaneAnchor {
+                let planeAnchor = raycastResult.anchor as? ARPlaneAnchor
+                if let planeAnchor = planeAnchor {
                     entityOnPlane(for: raycastResult, planeAnchor: planeAnchor)
-                    currentPlaneAnchor = planeAnchor
                 } else {
                     entityOffPlane(raycastResult, camera)
-                    currentPlaneAnchor = nil
                 }
-                self.delegate?.focusEntity(self, trackingUpdated: state, oldState: oldValue)
+                defer { currentPlaneAnchor = planeAnchor }
                 if stateChanged {
                     self.delegate?.toTrackingState()
                 }
             #endif
             }
+            self.delegate?.focusEntity(self, trackingUpdated: state, oldState: oldValue)
         }
     }
 
@@ -199,7 +216,14 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     internal var currentAlignment: ARPlaneAnchor.Alignment?
 
     /// The current plane anchor if the focus square is on a plane.
-    public internal(set) var currentPlaneAnchor: ARPlaneAnchor?
+    public internal(set) var currentPlaneAnchor: ARPlaneAnchor? {
+        didSet {
+            if (oldValue == nil && self.currentPlaneAnchor == nil) || (currentPlaneAnchor == oldValue) {
+                return
+            }
+            self.delegate?.focusEntity(self, planeChanged: currentPlaneAnchor, oldPlane: oldValue)
+        }
+    }
 
     /// The focus square's most recent alignments.
     internal var recentFocusEntityAlignments: [ARPlaneAnchor.Alignment] = []
