@@ -30,7 +30,7 @@ public extension FocusEntity {
             case .color(let uikitColour):
                 modelMaterial.color = .init(tint: uikitColour, texture: nil)
             case .texture(let tex):
-                modelMaterial.color = .init(tint: .white, texture: .init(tex))
+                modelMaterial.color = .init(tint: .white.withAlphaComponent(0.9999), texture: .init(tex))
             @unknown default: break
             }
         } else {
