@@ -125,6 +125,8 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     private var updateCancellable: Cancellable?
     public private(set) var isAutoUpdating: Bool = false
 
+    /// Auto update the focus entity using `SceneEvents.Update`.
+    /// - Parameter autoUpdate: Should update the entity or not.
     public func setAutoUpdate(to autoUpdate: Bool) {
         guard autoUpdate != self.isAutoUpdating,
               !(autoUpdate && self.arView == nil)
@@ -168,6 +170,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     }
     #endif
 
+    /// Current state of ``FocusEntity``.
     public var state: State = .initializing {
         didSet {
             guard state != oldValue else { return }
@@ -200,6 +203,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
         }
     }
 
+    /// Whether FocusEntity is on a plane or not.
     public internal(set) var onPlane: Bool = false
 
     /// Indicates if the square is currently being animated.
@@ -250,9 +254,18 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
 
     // MARK: - Initialization
 
+    /// Create a new ``FocusEntity`` instance.
+    /// - Parameters:
+    ///   - arView: ARView containing the scene where the FocusEntity should be added.
+    ///   - style: Style of the ``FocusEntity``.
     public convenience init(on arView: ARView, style: FocusEntityComponent.Style) {
         self.init(on: arView, focus: FocusEntityComponent(style: style))
     }
+
+    /// Create a new ``FocusEntity`` instance using the full ``FocusEntityComponent`` object.
+    /// - Parameters:
+    ///   - arView: ARView containing the scene where the FocusEntity should be added.
+    ///   - focus: Main component for the ``FocusEntity``
     public required init(on arView: ARView, focus: FocusEntityComponent) {
         self.arView = arView
         super.init()
