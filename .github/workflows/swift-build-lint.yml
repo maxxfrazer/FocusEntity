@@ -1,0 +1,23 @@
+name: swiftlint
+
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+    branches:
+    - "*"
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout 🛎
+      uses: actions/checkout@v3 
+    - name: Swift Lint 🧹
+      run: swiftlint --strict
+    - name: Test Build 🔨
+      run: xcodebuild -scheme $SCHEME -destination $DESTINATION
+      env:
+        SCHEME: FocusEntity
+        DESTINATION: generic/platform=iOS

@@ -88,14 +88,6 @@ public extension FocusEntityDelegate {
  */
 open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
 
-    public enum FEError: Error {
-        case noScene
-    }
-
-    private var myScene: Scene? {
-        self.arView?.scene
-    }
-
     internal weak var arView: ARView?
 
     /// For moving the FocusEntity to a whole new ARView
@@ -134,7 +126,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
         self.updateCancellable?.cancel()
         if autoUpdate {
             #if canImport(ARKit)
-            self.updateCancellable = self.myScene?.subscribe(
+            self.updateCancellable = self.arView?.scene.subscribe(
                 to: SceneEvents.Update.self, self.updateFocusEntity
             )
             #endif
@@ -205,10 +197,8 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
 
     /// Whether FocusEntity is on a plane or not.
     public internal(set) var onPlane: Bool = false
-
     /// Indicates if the square is currently being animated.
     public internal(set) var isAnimating = false
-
     /// Indicates if the square is currently changing its alignment.
     public internal(set) var isChangingAlignment = false
 
@@ -272,7 +262,6 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
         self.focus = focus
         self.name = "FocusEntity"
         self.orientation = simd_quatf(angle: .pi / 2, axis: [1, 0, 0])
-
         self.addChild(self.positioningEntity)
 
         cameraAnchor = AnchorEntity(.camera)
@@ -290,9 +279,8 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
             self.fillPlane = fillPlane
             self.coloredStateChanged()
         case .classic:
-            guard let classicStyle = self.focus.classicStyle else {
-                return
-            }
+            guard let classicStyle = self.focus.classicStyle
+            else { return }
             self.setupClassic(classicStyle)
         }
     }
@@ -306,7 +294,6 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     /// Hides the focus square.
     func hide() {
         self.isEnabled = false
-        //    runAction(.fadeOut(duration: 0.5), forKey: "hide")
     }
 
     /// Displays the focus square parallel to the camera plane.
@@ -320,7 +307,6 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
 
     /// Places the focus entity in front of the camera instead of on a plane.
     private func putInFrontOfCamera() {
-
         // Works better than arView.ray()
         let newPosition = cameraAnchor.convert(position: [0, 0, -1], to: nil)
         recentFocusEntityPositions.append(newPosition)
@@ -375,9 +361,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
         case .classic:
             if self.onPlane {
                 self.onPlaneAnimation(newPlane: newPlane)
-            } else {
-                self.offPlaneAniation()
-            }
+            } else { self.offPlaneAniation() }
         }
     }
 
