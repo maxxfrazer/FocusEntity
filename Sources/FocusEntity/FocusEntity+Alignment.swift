@@ -6,9 +6,10 @@
 //  Copyright © 2019 Max Cobb. All rights reserved.
 //
 
-#if canImport(ARKit) && !targetEnvironment(simulator)
 import RealityKit
+#if canImport(ARKit)
 import ARKit
+#endif
 import Combine
 
 extension FocusEntity {
@@ -27,6 +28,7 @@ extension FocusEntity {
         self.position = average
     }
 
+    #if canImport(ARKit)
     /// Update the transform of the focus square to be aligned with the camera.
     internal func updateTransform(raycastResult: ARRaycastResult) {
         self.updatePosition()
@@ -90,6 +92,7 @@ extension FocusEntity {
             orientation = targetAlignment
         }
     }
+    #endif
 
     internal func normalize(_ angle: Float, forMinimalRotationTo ref: Float) -> Float {
         // Normalize angle in steps of 90 degrees such that the rotation to the other angle is minimal
@@ -112,6 +115,7 @@ extension FocusEntity {
         return (camTransform.translation, -[camDirection.x, camDirection.y, camDirection.z])
     }
 
+    #if canImport(ARKit)
     /// - Parameters:
     /// - Returns: ARRaycastResult if an existing plane geometry or an estimated plane are found, otherwise nil.
     internal func smartRaycast() -> ARRaycastResult? {
@@ -135,6 +139,7 @@ extension FocusEntity {
         // 2. As a fallback, check for a result on estimated planes.
         return results.first(where: { $0.target == .estimatedPlane })
     }
+    #endif
 
     /// Uses interpolation between orientations to create a smooth `easeOut` orientation adjustment animation.
     internal func performAlignmentAnimation(to newOrientation: simd_quatf) {
@@ -153,6 +158,7 @@ extension FocusEntity {
         return vectorsDot < 0.999
     }
 
+    #if canImport(ARKit)
     /**
      Reduce visual size change with distance by scaling up when close and down when far away.
      
@@ -170,5 +176,5 @@ extension FocusEntity {
             return 0.25 * distanceFromCamera + 0.825
         }
     }
+    #endif
 }
-#endif

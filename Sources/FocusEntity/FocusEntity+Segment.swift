@@ -12,13 +12,13 @@ internal extension FocusEntity {
     /*
      The focus square consists of eight segments as follows, which can be individually animated.
 
-     s0  s1
-     _   _
+         s0  s1
+         _   _
      s2 |     | s3
 
      s4 |     | s5
-     -   -
-     s6  s7
+         -   -
+         s6  s7
      */
     enum Corner {
         case topLeft // s0, s2

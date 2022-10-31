@@ -6,7 +6,6 @@
 //  Copyright © 2019 Max Cobb. All rights reserved.
 //
 
-#if canImport(ARKit) && !targetEnvironment(simulator)
 import RealityKit
 
 /// An extension of FocusEntity holding the methods for the "classic" style.
@@ -76,9 +75,6 @@ internal extension FocusEntity {
         }
 
         self.positioningEntity.scale = SIMD3<Float>(repeating: FocusEntity.size * FocusEntity.scaleForClosedSquare)
-
-        // Always render focus square on top of other content.
-//        self.displayNodeHierarchyOnTop(true)
     }
 
     // MARK: Animations
@@ -113,4 +109,3 @@ internal extension FocusEntity {
     }
 
 }
-#endif
