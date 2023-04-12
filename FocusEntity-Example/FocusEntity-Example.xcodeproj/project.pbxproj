@@ -14,6 +14,7 @@
 		F301E0DD231462AB0028AAF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F301E0DB231462AB0028AAF1 /* LaunchScreen.storyboard */; };
 		F301E0E5231462D90028AAF1 /* FocusARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301E0E4231462D90028AAF1 /* FocusARView.swift */; };
 		F339DB65275013C700D9A2B2 /* FocusEntity in Frameworks */ = {isa = PBXBuildFile; productRef = F339DB64275013C700D9A2B2 /* FocusEntity */; };
+		F385E0D229E74E97007CF478 /* BasicARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F385E0D129E74E97007CF478 /* BasicARView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		F301E0DE231462AB0028AAF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F301E0E4231462D90028AAF1 /* FocusARView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusARView.swift; sourceTree = "<group>"; };
 		F339DB622750138A00D9A2B2 /* FocusEntity */ = {isa = PBXFileReference; lastKnownFileType = folder; name = FocusEntity; path = ..; sourceTree = "<group>"; };
+		F385E0D129E74E97007CF478 /* BasicARView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicARView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 			children = (
 				F301E0D0231462A90028AAF1 /* AppDelegate.swift */,
 				F301E0D2231462A90028AAF1 /* ContentView.swift */,
+				F385E0D129E74E97007CF478 /* BasicARView.swift */,
 				F301E0E4231462D90028AAF1 /* FocusARView.swift */,
 				F301E0D6231462AB0028AAF1 /* Assets.xcassets */,
 				F301E0DB231462AB0028AAF1 /* LaunchScreen.storyboard */,
@@ -171,6 +174,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F385E0D229E74E97007CF478 /* BasicARView.swift in Sources */,
 				F301E0D3231462A90028AAF1 /* ContentView.swift in Sources */,
 				F301E0D1231462A90028AAF1 /* AppDelegate.swift in Sources */,
 				F301E0E5231462D90028AAF1 /* FocusARView.swift in Sources */,
@@ -311,13 +315,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"FocusEntity-Example/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 278494H572;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "FocusEntity-Example/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = uk.rocketar.focusentity.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -330,13 +335,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"FocusEntity-Example/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 278494H572;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "FocusEntity-Example/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = uk.rocketar.focusentity.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
