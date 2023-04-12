@@ -46,9 +46,13 @@ public extension HasFocusEntity {
 
 public protocol FocusEntityDelegate: AnyObject {
     /// Called when the FocusEntity is now in world space
+    /// *Deprecated*: use ``focusEntity(_:trackingUpdated:oldState:)-4wx6e`` instead.
+    @available(*, deprecated, message: "use focusEntity(_:trackingUpdated:oldState:) instead")
     func toTrackingState()
 
     /// Called when the FocusEntity is tracking the camera
+    /// *Deprecated*: use ``focusEntity(_:trackingUpdated:oldState:)-4wx6e`` instead.
+    @available(*, deprecated, message: "use focusEntity(_:trackingUpdated:oldState:) instead")
     func toInitializingState()
 
     /// When the tracking state of the FocusEntity updates. This will be called every update frame.
@@ -59,7 +63,7 @@ public protocol FocusEntityDelegate: AnyObject {
     func focusEntity(
         _ focusEntity: FocusEntity,
         trackingUpdated trackingState: FocusEntity.State,
-        oldState: FocusEntity.State
+        oldState: FocusEntity.State?
     )
 
     /// When the plane this focus entity is tracking changes. If the focus entity moves around within one plane anchor there will be no calls.
@@ -78,7 +82,7 @@ public extension FocusEntityDelegate {
     func toTrackingState() {}
     func toInitializingState() {}
     func focusEntity(
-        _ focusEntity: FocusEntity, trackingUpdated trackingState: FocusEntity.State, oldState: FocusEntity.State
+        _ focusEntity: FocusEntity, trackingUpdated trackingState: FocusEntity.State, oldState: FocusEntity.State? = nil
     ) {}
     func focusEntity(_ focusEntity: FocusEntity, planeChanged: ARPlaneAnchor?, oldPlane: ARPlaneAnchor?) {}
 }
@@ -171,7 +175,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
             case .initializing:
                 if oldValue != .initializing {
                     displayAsBillboard()
-                    self.delegate?.toInitializingState()
+                    self.delegate?.focusEntity(self, trackingUpdated: state, oldState: oldValue)
                 }
             #if canImport(ARKit)
             case let .tracking(raycastResult, camera):
@@ -185,13 +189,34 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
                 } else {
                     entityOffPlane(raycastResult, camera)
                 }
+                if self.scaleEntityBasedOnDistance,
+                   let cameraTransform = self.arView?.cameraTransform {
+                    self.scale = .one * scaleBasedOnDistance(cameraTransform: cameraTransform)
+                    print(self.scale.x)
+                }
+
                 defer { currentPlaneAnchor = planeAnchor }
                 if stateChanged {
-                    self.delegate?.toTrackingState()
+                    self.delegate?.focusEntity(self, trackingUpdated: state, oldState: oldValue)
                 }
             #endif
             }
-            self.delegate?.focusEntity(self, trackingUpdated: state, oldState: oldValue)
+        }
+    }
+
+    /**
+    Reduce visual size change with distance by scaling up when close and down when far away.
+
+    These adjustments result in a scale of 1.0x for a distance of 0.7 m or less
+    (estimated distance when looking at a table), and a scale of 1.2x
+    for a distance 1.5 m distance (estimated distance when looking at the floor).
+    */
+    private func scaleBasedOnDistance(cameraTransform: Transform) -> Float {
+        let distanceFromCamera = simd_length(self.position(relativeTo: nil) - cameraTransform.translation)
+        if distanceFromCamera < 0.7 {
+            return distanceFromCamera / 0.7
+        } else {
+            return 0.25 * distanceFromCamera + 0.825
         }
     }
 
@@ -221,26 +246,17 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
 
     /// The focus square's most recent alignments.
     internal var recentFocusEntityAlignments: [ARPlaneAnchor.Alignment] = []
-
     /// Previously visited plane anchors.
     internal var anchorsOfVisitedPlanes: Set<ARAnchor> = []
     #endif
-
     /// The focus square's most recent positions.
     internal var recentFocusEntityPositions: [SIMD3<Float>] = []
-
     /// The primary node that controls the position of other `FocusEntity` nodes.
     internal let positioningEntity = Entity()
-
     internal var fillPlane: ModelEntity?
 
-    public var scaleEntityBasedOnDistance = true {
-        didSet {
-            if self.scaleEntityBasedOnDistance == false {
-                self.scale = .one
-            }
-        }
-    }
+    /// Modify the scale of the FocusEntity to make it slightly bigger when further away.
+    public var scaleEntityBasedOnDistance = true
 
     // MARK: - Initialization
 
@@ -269,7 +285,7 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
 
         // Start the focus square as a billboard.
         displayAsBillboard()
-        self.delegate?.toInitializingState()
+        self.delegate?.focusEntity(self, trackingUpdated: .initializing, oldState: nil)
         arView.scene.addAnchor(self)
         self.setAutoUpdate(to: true)
         switch self.focus.style {
@@ -290,11 +306,6 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
     }
 
     // MARK: - Appearance
-
-    /// Hides the focus square.
-    func hide() {
-        self.isEnabled = false
-    }
 
     /// Displays the focus square parallel to the camera plane.
     private func displayAsBillboard() {

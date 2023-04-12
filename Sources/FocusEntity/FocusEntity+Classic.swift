@@ -25,8 +25,6 @@ internal extension FocusEntity {
     /// Duration of the open/close animation. Not currently used.
     static let animationDuration = 0.7
 
-    /// List of the segments in the focus square.
-
     // MARK: - Initialization
 
     func setupClassic(_ classicStyle: ClassicStyle) {
