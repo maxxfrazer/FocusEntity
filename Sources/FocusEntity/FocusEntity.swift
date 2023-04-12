@@ -46,9 +46,13 @@ public extension HasFocusEntity {
 
 public protocol FocusEntityDelegate: AnyObject {
     /// Called when the FocusEntity is now in world space
+    /// *Deprecated*: use ``focusEntity(_:trackingUpdated:oldState:)-4wx6e`` instead.
+    @available(*, deprecated, message: "use focusEntity(_:trackingUpdated:oldState:) instead")
     func toTrackingState()
 
     /// Called when the FocusEntity is tracking the camera
+    /// *Deprecated*: use ``focusEntity(_:trackingUpdated:oldState:)-4wx6e`` instead.
+    @available(*, deprecated, message: "use focusEntity(_:trackingUpdated:oldState:) instead")
     func toInitializingState()
 
     /// When the tracking state of the FocusEntity updates. This will be called every update frame.
