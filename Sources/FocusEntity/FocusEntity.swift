@@ -192,7 +192,6 @@ open class FocusEntity: Entity, HasAnchoring, HasFocusEntity {
                 if self.scaleEntityBasedOnDistance,
                    let cameraTransform = self.arView?.cameraTransform {
                     self.scale = .one * scaleBasedOnDistance(cameraTransform: cameraTransform)
-                    print(self.scale.x)
                 }
 
                 defer { currentPlaneAnchor = planeAnchor }
