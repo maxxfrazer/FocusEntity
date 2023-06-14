@@ -66,18 +66,19 @@ internal extension FocusEntity {
             self.corner = corner
             self.alignment = alignment
 
-            switch alignment {
-            case .vertical:
-                plane = ModelComponent(
-                    mesh: .generatePlane(width: 1, depth: 1),
-                    materials: [UnlitMaterial(color: color)]
-                )
-            case .horizontal:
-                plane = ModelComponent(
-                    mesh: .generatePlane(width: 1, depth: 1),
-                    materials: [UnlitMaterial(color: color)]
-                )
+            var mat: Material!
+            if #available(iOS 15.0, *) {
+                var phMat = PhysicallyBasedMaterial()
+                phMat.baseColor = .init(tint: .black)
+                phMat.emissiveColor = .init(color: color)
+                phMat.emissiveIntensity = 2
+                mat = phMat
+            } else {
+                // Fallback on earlier versions
+                mat = UnlitMaterial(color: color)
             }
+            plane = ModelComponent(mesh: .generatePlane(width: 1, depth: 1), materials: [mat])
+
             super.init()
 
             switch alignment {
@@ -86,15 +87,7 @@ internal extension FocusEntity {
             case .horizontal:
                 self.scale = [Segment.length, 1, Segment.thickness]
             }
-            //      self.orientation = .init(angle: .pi / 2, axis: [1, 0, 0])
             self.name = name
-
-            //      let material = plane.firstMaterial!
-            //      material.diffuse.contents = FocusSquare.primaryColor
-            //      material.isDoubleSided = true
-            //      material.ambient.contents = UIColor.black
-            //      material.lightingModel = .constant
-            //      material.emission.contents = FocusSquare.primaryColor
             model = plane
         }
 

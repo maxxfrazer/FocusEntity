@@ -123,21 +123,19 @@ extension FocusEntity {
         guard let (camPos, camDir) = self.getCamVector() else {
             return nil
         }
-        let rcQuery = ARRaycastQuery(
-            origin: camPos, direction: camDir,
-            allowing: self.allowedRaycast, alignment: .any
-        )
-        let results = self.arView?.session.raycast(rcQuery) ?? []
+        for target in self.allowedRaycasts {
+            let rcQuery = ARRaycastQuery(
+                origin: camPos, direction: camDir,
+                allowing: target, alignment: .any
+            )
+            let results = self.arView?.session.raycast(rcQuery) ?? []
 
-        // 1. Check for a result on an existing plane using geometry.
-        if let existingPlaneUsingGeometryResult = results.first(
-            where: { $0.target == .existingPlaneGeometry }
-        ) {
-            return existingPlaneUsingGeometryResult
+            // Check for a result matching target
+            if let result = results.first(
+                where: { $0.target == target }
+            ) { return result }
         }
-
-        // 2. As a fallback, check for a result on estimated planes.
-        return results.first(where: { $0.target == .estimatedPlane })
+        return nil
     }
     #endif
 

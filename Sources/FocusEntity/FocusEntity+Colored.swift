@@ -24,19 +24,24 @@ public extension FocusEntity {
         if self.fillPlane?.model?.materials.count == 0 {
             self.fillPlane?.model?.materials = [SimpleMaterial()]
         }
-        var modelMaterial = UnlitMaterial(color: .clear)
+        var modelMaterial: Material!
         if #available(iOS 15, macOS 12, *) {
+            var mat = PhysicallyBasedMaterial()
             switch endColor {
             case .color(let uikitColour):
-                modelMaterial.color = .init(tint: uikitColour, texture: nil)
+                mat.baseColor = .init(tint: .black.withAlphaComponent(uikitColour.cgColor.alpha))
+                mat.emissiveColor = .init(color: uikitColour)
+                mat.emissiveIntensity = 2
             case .texture(let tex):
-                modelMaterial.color = .init(tint: .white.withAlphaComponent(0.9999), texture: .init(tex))
+                mat.baseColor = .init(tint: .white.withAlphaComponent(0.9999), texture: .init(tex))
             @unknown default: break
             }
+            modelMaterial = mat
         } else {
-            modelMaterial.baseColor = endColor
-            // Necessary for transparency.
-            modelMaterial.tintColor = Material.Color.white.withAlphaComponent(0.995)
+            var mat = UnlitMaterial(color: .clear)
+            mat.baseColor = endColor
+            mat.tintColor = .white.withAlphaComponent(0.9999)
+            modelMaterial = mat
         }
         self.fillPlane?.model?.materials[0] = modelMaterial
     }
