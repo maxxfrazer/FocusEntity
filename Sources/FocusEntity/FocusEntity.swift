@@ -37,9 +37,9 @@ public extension HasFocusEntity {
         set { self.focus.segments = newValue }
     }
     #if canImport(ARKit)
-    var allowedRaycast: ARRaycastQuery.Target {
-        get { self.focus.allowedRaycast }
-        set { self.focus.allowedRaycast = newValue }
+    var allowedRaycasts: [ARRaycastQuery.Target] {
+        get { self.focus.allowedRaycasts }
+        set { self.focus.allowedRaycasts = newValue }
     }
     #endif
 }

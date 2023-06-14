@@ -84,7 +84,7 @@ public struct FocusEntityComponent: Component {
     public internal(set) var isOpen = true
     internal var segments: [FocusEntity.Segment] = []
     #if !os(macOS)
-    public var allowedRaycast: ARRaycastQuery.Target = .estimatedPlane
+    public var allowedRaycasts: [ARRaycastQuery.Target] = [.existingPlaneGeometry, .estimatedPlane]
     #endif
 
     static var defaultPlane = MeshResource.generatePlane(
@@ -95,13 +95,5 @@ public struct FocusEntityComponent: Component {
     /// - Parameter style: FocusEntityComponent Style, dictating how the FocusEntity will appear in different states.
     public init(style: Style) {
         self.style = style
-        // If the device has LiDAR, then default behaviour is to only allow
-        // existing detected planes
-        #if !os(macOS)
-        if #available(iOS 13.4, *),
-           ARWorldTrackingConfiguration.supportsSceneReconstruction(.mesh) {
-            self.allowedRaycast = .existingPlaneGeometry
-        }
-        #endif
     }
 }
