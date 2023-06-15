@@ -1,21 +1,22 @@
 # FocusEntity
 
-This package is based on the package [ARKit-FocusNode](https://github.com/maxxfrazer/ARKit-FocusNode), but adapted to work in Apple's framework RealityKit.
-
+This package is based on [ARKit-FocusNode](https://github.com/maxxfrazer/ARKit-FocusNode), but adapted to work in Apple's framework RealityKit.
 
 <p align="center">
-  <img src="https://img.shields.io/badge/platform-iOS-lightgrey"/>
-  <img src="https://img.shields.io/github/v/release/maxxfrazer/FocusEntity?color=orange&label=SwiftPM&logo=swift"/>
-  <img src="https://img.shields.io/badge/Swift-5.2-orange?logo=swift"/>
+  <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fmaxxfrazer%2FFocusEntity%2Fbadge%3Ftype%3Dswift-versions"/>
+  <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fmaxxfrazer%2FFocusEntity%2Fbadge%3Ftype%3Dplatforms"/></br>
   <img src="https://github.com/maxxfrazer/FocusEntity/workflows/swiftlint/badge.svg"/>
   <img src="https://github.com/maxxfrazer/FocusEntity/workflows/build/badge.svg"/>
   <img src="https://img.shields.io/github/license/maxxfrazer/FocusEntity"/>
 </p>
 
-![FocusEntity Example 1](media/FocusEntity-Example1.gif)
+<p align="center">
+  <img src="media/focusentity-dali.gif"/>
+</p>
 
-[The Example](./Example-RealityKit) looks identical to the above GIF, which uses the FocusEntity classic style.
+[The Example](./FocusEntity-Example) looks identical to the above GIF, which uses the FocusEntity classic style.
 
+See the [documentation](https://maxxfrazer.github.io/FocusEntity/documentation/focusentity/) for more.
 
 ## Minimum Requirements
   - Swift 5.2
@@ -36,26 +37,26 @@ Go to File > Swift Packages > Add Package Dependency, and paste in this link:
 ---
 ## Usage
 
-See the [Example](./FocusEntity-Example) for a full working example as can be seen in the GIF above
+See the [Example project](./FocusEntity-Example) for a full working example as can be seen in the GIF above
 
-- After installing, import `FocusEntity` to your .swift file
-- Create an instance of FocusEntity:
-<br>```let focusSquare = FocusEntity(on: self.arView, focus: .classic)```
-<br>or
-<br>```let focusSquare = FocusEntity(on: self.arView, style: .classic(color: .yellow))```
-<br><br>(Optional)<br>
-- Set `focusSquare.delegate` to an object which conforms to `FocusEntityDelegate` if you wish to get callbacks for when the FocusEntity changes state.
-- Optionally, you may select to use one of 3 visual styles: classic, color, and material.
-- If you choose material, you may use the preset textures or provide your own customized textures.
-- If you want to provide your own textures, add them to the Assets.xcassets catalog, then type the name of the asset in the appropriate place in this code:
-<br>```let onColor: MaterialColorParameter = try .texture(.load(named: "<#customAsset1#>"))```
-<br>```let offColor: MaterialColorParameter = try .texture(.load(named: "<#customAsset2#>"))```
+1. Install `FocusEntity` with Swift Package Manager
 
+```
+https://github.com/maxxfrazer/FocusEntity.git
+```
 
-If something's not making sense in the Example, [send me a tweet](https://twitter.com/maxxfrazer) or Fork & open a Pull Request on this repository to make something more clear.
+2. Create an instance of FocusEntity, referencing your ARView:
 
-I'm hoping to make the animations look a little smoother over time, but any and all contributions are welcome and encouraged.
+```swift
+let focusSquare = FocusEntity(on: self.arView, focus: .classic)
+```
+
+And that's it! The FocusEntity should already be tracking around your AR scene. There are options to turn the entity off or change its properties.
+Check out [the documentation](https://maxxfrazer.github.io/FocusEntity/documentation/focusentity/) or [example project](FocusEntity-Example) to learn more.
 
 ---
 
-The original code to create this repository has been adapted from one of Apple's examples from 2018, [license also included](LICENSE.origin). I have merely adapted the code to be used and distributed from within a Swift Package, and now further adapted to work with [RealityKit](https://developer.apple.com/documentation/realitykit).
+Feel free to [send me a tweet](https://twitter.com/maxxfrazer) if you have any problems using FocusEntity, or open an Issue or PR!
+
+
+> The original code to create this repository has been adapted from one of Apple's examples from 2018, [license also included](LICENSE.origin). I have adapted the code to be used and distributed from within a Swift Package, and now further adapted to work with [RealityKit](https://developer.apple.com/documentation/realitykit).
