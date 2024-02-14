@@ -34,7 +34,7 @@ public extension FocusEntity {
                 mat.emissiveIntensity = 2
                 modelMaterial = mat
             case .texture(let tex):
-                var mat = SimpleMaterial()
+                var mat = UnlitMaterial()
                 mat.color = .init(tint: .white.withAlphaComponent(0.9999), texture: .init(tex))
                 modelMaterial = mat
             @unknown default: break
