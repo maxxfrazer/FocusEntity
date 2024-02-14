@@ -26,17 +26,19 @@ public extension FocusEntity {
         }
         var modelMaterial: Material!
         if #available(iOS 15, macOS 12, *) {
-            var mat = PhysicallyBasedMaterial()
             switch endColor {
             case .color(let uikitColour):
+                var mat = PhysicallyBasedMaterial()
                 mat.baseColor = .init(tint: .black.withAlphaComponent(uikitColour.cgColor.alpha))
                 mat.emissiveColor = .init(color: uikitColour)
                 mat.emissiveIntensity = 2
+                modelMaterial = mat
             case .texture(let tex):
-                mat.baseColor = .init(tint: .white.withAlphaComponent(0.9999), texture: .init(tex))
+                var mat = SimpleMaterial()
+                mat.color = .init(tint: .white.withAlphaComponent(0.9999), texture: .init(tex))
+                modelMaterial = mat
             @unknown default: break
             }
-            modelMaterial = mat
         } else {
             var mat = UnlitMaterial(color: .clear)
             mat.baseColor = endColor
