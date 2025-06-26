@@ -8,8 +8,8 @@
 
 import Foundation
 import RealityKit
-#if canImport(RealityFoundation)
-import RealityFoundation
+#if canImport(RealityKit)
+import RealityKit
 #endif
 
 #if os(macOS) || targetEnvironment(simulator)
